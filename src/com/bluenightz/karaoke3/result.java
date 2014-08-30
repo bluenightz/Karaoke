@@ -165,7 +165,6 @@ public class result extends Activity{
 //    	newplaylist = serverpath+"control.php";
         
         ip = s.getString("ip", null);
-        //ip = host+":8080";
         webPath = "/karaoke/";
         serverpath = "http://"+ip+webPath;
         urlcommand = serverpath+"playlist.php?";
@@ -301,7 +300,7 @@ public class result extends Activity{
 								_s.path = ss.path;
 								_s.time = Integer.valueOf(ss.time);
 								playlist.addsong(_s);
-								 
+								
 							}else if(s.equals("Play")){  
 								final String file = urlencode(_songurlobject.url);
 									//if(playlist.gettotal() == 0){
@@ -318,12 +317,7 @@ public class result extends Activity{
 										String _timestr = ss.time;
 										int _timeint = Integer.valueOf(_timestr)/1000-1500;
 										Log.e("###show time ####",String.valueOf(_timeint));
-										//(Integer.valueOf(playlist.listtemp.get(l1).time)/1000-200);  
-//										karaokeTimeManage.clear();
-//										karaokeTimeManage.buildTime(_timeint, _timeint, true);
-									//}else{
 										
-									//}
 								
 								
 							}else if(s.equals("Cancel")){

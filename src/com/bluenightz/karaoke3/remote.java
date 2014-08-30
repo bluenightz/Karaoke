@@ -137,6 +137,7 @@ public class remote extends Activity{
  	private String newplaylist;
  	
  	private ArrayList<Map<String, Object>> items;
+ 	private String webPath;
  	
  	//private String cmdurl;
  	//private int currentid;
@@ -152,14 +153,22 @@ public class remote extends Activity{
         
         
         s = PreferenceManager.getDefaultSharedPreferences(this);
-        host = s.getString("ip", null);
+        ip = s.getString("ip", null);
         
-        ip = host+":8080";
-        urlstatus = "http://"+ip+"/requests/status.xml";
-    	urlcommand = "http://"+ip+"/requests/status.xml?";
-    	urlplaylist = "http://"+ip+"/requests/playlist.xml";
-    	serverpath = "http://"+host+"/karaoke/";
+//        ip = host+":8080";
+//        urlstatus = "http://"+ip+"/requests/status.xml";
+//    	urlcommand = "http://"+ip+"/requests/status.xml?";
+//    	urlplaylist = "http://"+ip+"/requests/playlist.xml";
+//    	serverpath = "http://"+host+"/karaoke/";
+//        newplaylist = serverpath+"control.php";
+        
+        webPath = "/karaoke/";
+        serverpath = "http://"+ip+"/karaoke/";
+        urlstatus = serverpath+"playlist.php";
+    	urlcommand = serverpath+"playlsit.php?";
+    	urlplaylist = serverpath+"playlist.php";
         newplaylist = serverpath+"control.php";
+        
         
         if(mutestat==null){
         	mutestat=false;
@@ -185,7 +194,7 @@ public class remote extends Activity{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String cmdurl = urlcommand+"command=pl_pause";
+				String cmdurl = urlcommand+"MODE=pl_pause";
 		    	
 		    	try{
 		    		final InputStream is1 = new URL(cmdurl).openStream();
@@ -226,7 +235,7 @@ public class remote extends Activity{
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-		    	String cmdurl = urlcommand+"command=seek&val=0";
+		    	String cmdurl = urlcommand+"MODE=seek&val=0";
 		    	
 		    	try{
 		    		final InputStream is1 = new URL(cmdurl).openStream();
@@ -299,7 +308,7 @@ public class remote extends Activity{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
-					String cmdurl = urlcommand+"command=pl_play&id="+playlist.currentID;
+					String cmdurl = urlcommand+"MODE=pl_play&id="+playlist.currentID;
 					
 					String _timestr = tempforplayagain.time;
 					int _timeint = Integer.valueOf(_timestr)/1000-1500;
@@ -325,7 +334,7 @@ public class remote extends Activity{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if(playlist._index != 0){
-					String cmdurl = urlcommand+"command=pl_previous";  
+					String cmdurl = urlcommand+"MODE=pl_previous";  
 					int v1 = Integer.valueOf(playlist._index)-1;
 					String v2 = data.get(v1).id;
 			    	playlist.currentID = v2;
@@ -346,7 +355,7 @@ public class remote extends Activity{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if(playlist._index != data.size()-1 && data.size() > 0){
-					String cmdurl = urlcommand+"command=pl_next";
+					String cmdurl = urlcommand+"MODE=pl_next";
 					int v1 = Integer.valueOf(playlist._index)+1;
 					String v2 = data.get(v1).id;
 			    	playlist.currentID = v2;
@@ -371,13 +380,13 @@ public class remote extends Activity{
 					int soundC = (playlist.soundChannel<2) ? ++playlist.soundChannel : (playlist.soundChannel=0);
 					if(soundC==0){
 						//100%,100%
-						cmdurl = "http://"+host+"/sound.php?R=100&L=100";
+						cmdurl = "http://"+serverpath+"/sound.php?R=100&L=100";
 					}else if(soundC==1){
 						//0%,100%
-						cmdurl = "http://"+host+"/sound.php?R=0&L=100";
+						cmdurl = "http://"+serverpath+"/sound.php?R=0&L=100";
 					}else if(soundC==2){
 						//100%,0%
-						cmdurl = "http://"+host+"/sound.php?R=100&L=0";
+						cmdurl = "http://"+serverpath+"/sound.php?R=100&L=0";
 					}
 					
 					   
@@ -402,7 +411,7 @@ public class remote extends Activity{
              
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				// TODO Auto-generated method stub
-				String cmdurl = urlcommand+"command=volume&val="+vol;
+				String cmdurl = urlcommand+"MODE=volume&val="+vol;
 		    	  
 		    	try{
 		    		final InputStream is = new URL(cmdurl).openStream();

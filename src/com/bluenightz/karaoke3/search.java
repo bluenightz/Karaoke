@@ -72,6 +72,8 @@ public class search extends Activity{
 	public ArrayList<String> sF;
 	private SharedPreferences s;
 	private boolean windowB;
+	private String webPath;
+	private String serverpath;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,14 +82,17 @@ public class search extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
         	
-        Log.e("yess","sdfsdfsdf");
+        Log.e("search.java","Start Activity");
         
            s = PreferenceManager.getDefaultSharedPreferences(this);
            ip = s.getString("ip", null);
-           String ip2 = s.getString("ip", null);
-           ip = ip+":8080";
+           webPath = "/karaoke/";
+           serverpath = "http://"+ip+webPath;
            
-           pathGlobal.playlist = "http://"+ip2+"/karaoke/control.php";
+           //String ip2 = s.getString("ip", null);
+           //ip = ip+":8080";
+           
+           pathGlobal.playlist = serverpath+"control.php";
              
            
            //List<com.aig.karaoke.mvClass.Data> allmv = mvClass.getAllMV();
@@ -367,7 +372,7 @@ public class search extends Activity{
 	                    Intent i = new Intent(search.this, result.class);
 	                    String s = _search_songtxt.getText().toString();
 	                    i.putExtra("searchstr",s );
-	                    //i.putExtra("searchstr","‡∏ù‡∏ô" );
+	                    //i.putExtra("searchstr","����������������" );
 	                    i.putExtra("modestr",mode );
 	    				i.putStringArrayListExtra("sN", sN);
 	    				i.putStringArrayListExtra("sID", sID);
