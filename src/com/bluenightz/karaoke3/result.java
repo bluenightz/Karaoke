@@ -301,7 +301,7 @@ public class result extends Activity{
 								_s.path = ss.path;
 								_s.time = Integer.valueOf(ss.time);
 								playlist.addsong(_s);
-								
+								 
 							}else if(s.equals("Play")){  
 								final String file = urlencode(_songurlobject.url);
 									//if(playlist.gettotal() == 0){
