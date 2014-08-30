@@ -144,16 +144,16 @@ public class remote extends Activity{
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	Log.d("remote.java","Start Activity");
+    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote);
         
-      
         String _l = Lang.getLang();
-        
+        Log.d("remote.java","Start Activity");
         
         s = PreferenceManager.getDefaultSharedPreferences(this);
         ip = s.getString("ip", null);
+        
         
 //        ip = host+":8080";
 //        urlstatus = "http://"+ip+"/requests/status.xml";
@@ -169,6 +169,10 @@ public class remote extends Activity{
     	urlplaylist = serverpath+"playlist.php";
         newplaylist = serverpath+"control.php";
         
+        
+        Log.d("remote.java serverpath = ",serverpath);
+        Log.d("remote.java urlstatus = ",urlstatus);
+        Log.d("remote.java urlcommand = ",urlcommand);
         
         if(mutestat==null){
         	mutestat=false;
@@ -402,7 +406,7 @@ public class remote extends Activity{
 			});
          
         
-       
+        Log.d("remote.java","set Seek Bar");
         volbar1 = (SeekBar) findViewById(R.id.volbar);
         volbar1.setProgress(50);
         volbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -412,7 +416,7 @@ public class remote extends Activity{
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				// TODO Auto-generated method stub
 				String cmdurl = urlcommand+"MODE=volume&val="+vol;
-		    	  
+				Log.d("remote.java Seekbar","onStopTrackingTouch");
 		    	try{
 		    		final InputStream is = new URL(cmdurl).openStream();
 		    	}catch(Exception e){
@@ -422,12 +426,13 @@ public class remote extends Activity{
 			
 			public void onStartTrackingTouch(SeekBar seekBar) {
 				// TODO Auto-generated method stub
-				
+				Log.d("remote.java Seekbar","onStartTrackingTouch");
 			}
 			
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				// TODO Auto-generated method stub
+				Log.d("remote.java Seekbar","onProgressChanged");
 				num = 500;
 				vol = (int) Math.ceil((progress*500)/100);
 				
@@ -596,8 +601,8 @@ public class remote extends Activity{
 								}else if(s.equals("Delete")){
 									  
 									if(playlist.currentID.toString().equals(String.valueOf(data.get(selectedIndex).id))){
-										final String _cmdurl = urlcommand+"command=pl_delete&id="+data.get(selectedIndex).id;
-										String cmdurlplay = urlcommand+"command=pl_next";
+										final String _cmdurl = urlcommand+"MODE=pl_delete&id="+data.get(selectedIndex).id;
+										String cmdurlplay = urlcommand+"MODE=pl_next";
 										try{
 								    		final InputStream is = new URL(cmdurlplay).openStream();
 								    	}catch(Exception e){
@@ -633,8 +638,8 @@ public class remote extends Activity{
 										
 									}else{
 										
-								   		cmdurl = urlcommand+"command=pl_delete&id="+data.get(selectedIndex).id;
-										String cmdurlplay = urlcommand+"command=pl_next";
+								   		cmdurl = urlcommand+"MODE=pl_delete&id="+data.get(selectedIndex).id;
+										String cmdurlplay = urlcommand+"MODE=pl_next";
 										
 										data.remove(selectedIndex); 
 										items.remove(selectedIndex);
@@ -736,36 +741,36 @@ public class remote extends Activity{
     	String cmdurl = null;
     
     	if(method == "mute"){
-    		cmdurl = urlcommand+"command=volume&val=0";
+    		cmdurl = urlcommand+"MODE=volume&val=0";
     		volbar1.setProgress(0);
     	}
     	if(method == "nomute"){
-    		cmdurl = urlcommand+"command=volume&val=250";
+    		cmdurl = urlcommand+"MODE=volume&val=250";
     		volbar1.setProgress(50);
     	} 
     	
     	if(method == "add"){
     		//cmdurl = urlcommand+"command=in_play&input="+pathtovideo+url;
-    		cmdurl = urlcommand+"command=in_enqueue&input="+pathtovideo+url;
+    		cmdurl = urlcommand+"MODE=in_enqueue&input="+pathtovideo+url;
     	}
     	if(method == "addnopath"){
-    		cmdurl = urlcommand+"command=in_enqueue&input="+url;
+    		cmdurl = urlcommand+"MODE=in_enqueue&input="+url;
     	}
     	if(method == "revsort"){
-    		cmdurl = urlcommand+"command=in_enqueue&input="+pathtovideo+url;
+    		cmdurl = urlcommand+"MODE=in_enqueue&input="+pathtovideo+url;
     	}
     	if(method == "play"){
-    		cmdurl = urlcommand+"command=pl_play&id="+data.get(Integer.valueOf(url)).id; 
+    		cmdurl = urlcommand+"MODE=pl_play&id="+data.get(Integer.valueOf(url)).id; 
     		playlist._index = Integer.valueOf(url);
     	}
     	if(method == "play2"){
-    		cmdurl = urlcommand+"command=pl_play";
+    		cmdurl = urlcommand+"MODE=pl_play";
     	}
     	if(method == "run"){
-    		cmdurl = urlcommand+"command=seek&val="+url;
+    		cmdurl = urlcommand+"MODE=seek&val="+url;
     	}
     	if(method == "delete"){
-    		cmdurl = urlcommand+"command=pl_delete&id="+url;
+    		cmdurl = urlcommand+"MODE=pl_delete&id="+url;
     	}
     	
     	try{
@@ -1086,7 +1091,7 @@ public class remote extends Activity{
     
     private void runcmd(String t){
 
-    	String cmdurl = urlcommand+"command=seek&val="+t;
+    	String cmdurl = urlcommand+"MODE=seek&val="+t;
     	try{
     		final InputStream is = new URL(cmdurl).openStream();
     	}catch(Exception e){

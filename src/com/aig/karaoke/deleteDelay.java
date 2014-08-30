@@ -56,7 +56,7 @@ public class deleteDelay {
 			public void run() {
 				// TODO Auto-generated method stub
 				String cmdurl = null;
-				cmdurl = urlcommand+"command=pl_play&id="+id;  
+				cmdurl = urlcommand+"MODE=pl_play&id="+id;  
 		    	try{
 		    		final InputStream is = new URL(cmdurl).openStream();
 		    	}catch(Exception e){
@@ -86,7 +86,7 @@ public class deleteDelay {
     	//playlist.deletesong(_indexfromid);
     	String cmdurl = null;
     	//playlist.findindexfromid(url);
-    	cmdurl = urlcommand+"command=pl_delete&id="+url;    
+    	cmdurl = urlcommand+"MODE=pl_delete&id="+url;    
     	try{
     		final InputStream is = new URL(cmdurl).openStream();
     	}catch(Exception e){
@@ -99,7 +99,7 @@ public class deleteDelay {
 	
 	private static void play(String url){
 
-    	String cmdurl = urlcommand+"command=pl_next";
+    	String cmdurl = urlcommand+"MODE=pl_next";
     	
 		try{
     		final InputStream is = new URL(cmdurl).openStream();
