@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_withbutton"
+    tools:context=".search" >
+
+    <!--
+         <ImageView
+	    android:src="@drawable/mainbg"
+	    android:layout_width = "fill_parent"
+	    android:layout_height = "fill_parent"
+	    ></ImageView>
+    -->
+
+    <ImageView
+        android:id="@+id/home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="42dp"
+        android:layout_marginTop="55dp"
+        android:src="@drawable/language" />
+    
+    <ImageView
+        android:id="@+id/remote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/home"
+        android:layout_below="@id/home"
+        android:layout_marginTop="41dp"
+        android:src="@drawable/remote_playlist" />
+    
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/home"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="-40dp"
+        android:layout_toRightOf="@+id/home"
+        android:src="@drawable/line2" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/home"
+        android:layout_below="@+id/home"
+        android:layout_marginLeft="-35dp"
+        android:gravity="center"
+        android:text="LANGUAGE"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textView1"
+        android:layout_below="@+id/remote"
+        android:gravity="center"
+        android:text="REMOTE and PLAYLIST"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <LinearLayout
+        android:layout_width="700dp"
+        android:layout_height="500dp"
+        android:layout_alignLeft="@id/imageView1"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="145dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            android:visibility="visible" >
+
+            <TextView
+                android:id="@+id/search_maintxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="88dp"
+                android:layout_marginTop="36dp"
+                android:text="ค้นหา"
+                android:textSize="30dp"
+                android:visibility="gone" >
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/watchsong"
+                android:layout_width="180dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="13dp"
+                android:text="ชื่อเพลง"
+                android:textSize="@dimen/font_button" >
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/watchartist"
+                android:layout_width="180dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="13dp"
+                android:text="ชื่อศิลปิน"
+                android:textSize="@dimen/font_button" />
+
+            <TextView
+                android:id="@+id/watchqueue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="48dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="13dp"
+                android:text="ดูคิวเพลง"
+                android:textSize="20dp"
+                android:visibility="gone" >
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/watchentertainment"
+                android:layout_width="280dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="13dp"
+                android:text="Entertainment"
+                android:textSize="@dimen/font_button" >
+
+            </TextView>
+        </LinearLayout>
+        
+        
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="210dp"
+            android:layout_marginTop="150dp" >
+	
+            <TextView
+                android:id="@+id/newentry"
+                android:layout_width="240dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="0dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="เพลงเข้าใหม่"
+                android:textSize="@dimen/font_button"
+                android:typeface="monospace" >
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/top20"
+            android:layout_width="240dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="275dp"
+            android:layout_marginTop="0dp"
+            android:text="20 อันดับเพลงฮิต"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="@dimen/font_button" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/watchmodern"
+            android:layout_width="240dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="525dp"
+            android:layout_marginTop="0dp"
+            android:text="สตริง"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="@dimen/font_button" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/watchfolk"
+            android:layout_width="240dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="110dp"
+            android:text="ลูกทุ่ง/ลูกกรุง"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="@dimen/font_button" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/watchlife"
+            android:layout_width="240dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="275dp"
+            android:layout_marginTop="110dp"
+            android:text="เพื่อชีวิต"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="@dimen/font_button" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/lookallsong"
+            android:layout_width="240dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="525dp"
+            android:layout_marginTop="110dp"
+            android:text="เพลงทั้งหมด"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="@dimen/font_button" >
+        </TextView>
+            
+        </RelativeLayout>
+
+        
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/volcontrol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="34dp"
+        android:layout_marginTop="30dp"
+        android:visibility="invisible" >
+
+        <ImageView
+            android:id="@+id/btnRedu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:src="@drawable/btnreduce" />
+
+        <ImageView
+            android:id="@+id/btnIncr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/btnincrease" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/search_songtxt"
+        android:layout_width="740dp"
+        android:layout_height="110dp"
+        android:layout_alignLeft="@id/imageView1"
+        android:layout_alignTop="@+id/home"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="-35dp"
+        android:layout_toRightOf="@+id/textView1"
+        android:background="@drawable/searchbox"
+        android:ems="10"
+        android:singleLine="true"
+        android:text="Search"
+        android:paddingLeft="25dp"
+        android:textColor="#696e78"
+        android:textSize="30dp" >
+
+        <requestFocus />
+    </EditText>
+
+
+
+</RelativeLayout>

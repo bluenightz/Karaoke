@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg1"
+     >
+    
+   <!--  <ImageView
+	    android:src="@drawable/mainresult"
+	    android:layout_width = "fill_parent"
+	    android:layout_height = "fill_parent"
+	    ></ImageView> -->
+	
+	
+	<ImageView
+	    android:id="@+id/home2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="42dp"
+        android:layout_marginTop="55dp"
+        android:src="@drawable/search" />
+    
+    <ImageView
+	    android:id="@+id/remote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/home2"
+        android:layout_below="@id/home2"
+        android:layout_marginTop="41dp"
+        android:src="@drawable/remote_playlist" />
+    
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="470dp"
+        android:layout_alignTop="@+id/home2"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="-40dp"
+        android:layout_toRightOf="@+id/home2"
+        android:src="@drawable/line2" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/home2"
+        android:layout_below="@+id/home2"
+        android:layout_marginLeft="-35dp"
+        android:gravity="center"
+        android:text="SEARCH"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+    android:id="@+id/TextView02"
+    android:layout_width="220dp"
+    android:layout_height="wrap_content"
+    android:layout_alignLeft="@id/textView1"
+    android:layout_below="@+id/remote"
+    android:gravity="center"
+    android:text="REMOTE and PLAYLIST"
+    android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	
+	<!-- <ImageView 
+	    android:src="@drawable/btn_search"
+	    android:id="@+id/home2"
+	    android:layout_width = "wrap_content"
+	    android:layout_height = "wrap_content"
+	    android:layout_marginLeft="23dp" android:layout_marginTop="10dp"/>
+	
+	<ImageView 
+	    android:src="@drawable/iconremote"
+	    android:id="@+id/remote"
+	    android:layout_width = "wrap_content"
+	    android:layout_height = "wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_marginRight="23dp" android:layout_marginTop="10dp"/> -->
+	
+	<RelativeLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_marginLeft="20dp"
+	    android:layout_toRightOf="@id/imageView1" >
+
+	        <LinearLayout
+	            android:layout_width="695dp"
+	            android:layout_height="590dp"
+	            android:layout_alignParentTop="true"
+	            android:layout_marginLeft="20dp"
+	            android:layout_marginTop="20dp"
+	            android:orientation="vertical" >
+
+	            <ListView
+	                android:id="@+id/listView1"
+	                android:layout_width="fill_parent"
+	                android:layout_height="450dp"
+	                android:divider="#00000000"
+	                android:dividerHeight="0dp"
+	                android:cacheColorHint="#00000000"
+	                 >
+
+			    </ListView>
+	        </LinearLayout>
+	</RelativeLayout>
+
+<!-- 	<RelativeLayout
+	    android:layout_width="200dp"
+	    android:layout_height="fill_parent"
+	    android:layout_alignParentRight="true"
+	    android:visibility="gone" >
+
+	    <ImageView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="4dp"
+	        android:background="#000000"
+	        android:src="@drawable/picalbum"
+	        android:layout_alignParentBottom="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginBottom="30dp"
+	        ></ImageView>
+	</RelativeLayout> -->
+	
+</RelativeLayout>
+  

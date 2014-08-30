@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, Karaoke!</string>
+    <string name="app_name">Karaoke</string>
+    <string name="home">home</string>
+    <string name="language">LANGUAGE</string>
+    <string name="menu1">ภาษาไทย</string>
+    <string name="menu2">English</string>
+    <string name="menu3">Chinese</string>
+    <string name="menu4">Japanese</string>
+    <string name="menu5">Korean</string>
+	<string name="settings_label">Setting</string>
+	<string name="update">Update App!!</string>
+</resources>

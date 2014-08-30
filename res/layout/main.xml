@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg1" >
+    
+   <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        >
+        
+     <!--    <ImageView
+            android:src="@drawable/home_layout"
+            android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:layout_weight="1.2"
+            ></ImageView>
+        <ImageView
+            android:src="@drawable/mask"
+            android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:layout_weight="1.2"
+            ></ImageView>
+         -->
+        
+        
+    </FrameLayout>
+    
+		    <TextView
+		        android:id="@+id/text1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+				android:layout_marginLeft="300dp"
+				android:layout_centerVertical="true"
+		        android:text="Language"
+		        android:textSize="30sp" >
+		    </TextView>
+		    
+		    
+        <ImageView
+            android:src="@drawable/linecolumn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/text1"
+            android:layout_marginTop="245dip"
+            android:layout_marginLeft="50dip"
+            ></ImageView>
+		    
+		    <LinearLayout 
+		        android:layout_width="wrap_content"
+	        	android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:gravity="left"
+				android:layout_marginLeft="500dip"
+				android:paddingTop="10dip"
+				android:orientation="vertical"
+		        >
+		        
+			    <TextView
+		        	android:id="@+id/menu1"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:text="ภาษาไทย"
+			        android:textColor="#909090"
+			        android:layout_marginBottom="5dp"
+			        android:textSize="30dp"
+			        android:paddingTop="8dp"
+			        android:paddingBottom="9dp"
+			        android:paddingLeft="30dp"
+			        android:minWidth="258dp"
+			         >
+			    </TextView>
+		        
+			    <TextView
+		        	android:id="@+id/menu2"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:text="ENGLISH"
+			        android:textColor="#909090"
+			        android:layout_marginBottom="5dp"
+			        android:textSize="30dp" 
+			        android:paddingTop="8dp"
+			        android:paddingBottom="9dp"
+			        android:paddingLeft="30dp"
+			        android:minWidth="258dp"
+			        >
+			    </TextView>
+		        
+			    <TextView
+		        	android:id="@+id/menu3"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:text="CHINESE"
+			        android:textColor="#909090"
+			        android:layout_marginBottom="5dp"
+			        android:textSize="30dp" 
+			        android:paddingTop="8dp"
+			        android:paddingBottom="9dp"
+			        android:paddingLeft="30dp"
+			        android:minWidth="258dp"
+			        >
+			    </TextView>
+		        
+			    <TextView
+		        	android:id="@+id/menu4"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:text="JAPANESE"
+			        android:textColor="#909090"
+			        android:layout_marginBottom="5dp"
+			        android:textSize="30dp" 
+			        android:paddingTop="8dp"
+			        android:paddingBottom="9dp"
+			        android:paddingLeft="30dp"
+			        android:minWidth="258dp"
+			        >
+			    </TextView>
+		        
+			    <TextView
+		       	 	android:id="@+id/menu5"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:text="KOREAN"
+			        android:textColor="#909090"
+			        android:layout_marginBottom="5dp"
+			        android:textSize="30dp" 
+			        android:paddingTop="8dp"
+			        android:paddingBottom="9dp"
+			        android:paddingLeft="30dp"
+			        android:minWidth="258dp"
+			        >
+			    </TextView>
+		    
+		    </LinearLayout>
+		     <Button
+		        android:id="@+id/btnconfig"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentBottom="true"
+		        android:layout_alignParentRight="true"
+		        android:text="config path" android:visibility="invisible"/>
+</RelativeLayout>
+  

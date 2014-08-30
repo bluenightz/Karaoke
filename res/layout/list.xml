@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+     >
+    
+    <ImageView
+	    android:src="@drawable/bglistsong"
+	    android:layout_width = "800dp"
+	    android:layout_height = "480dp"
+	    android:layout_marginTop="20dp"
+	    ></ImageView>
+	
+    <TextView
+        android:id="@+id/showt"
+        android:layout_width="fill_parent"
+        android:layout_height="30sp"
+        ></TextView>
+	
+	
+	<RelativeLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_centerHorizontal="true"
+	    >
+	    
+	    <LinearLayout
+	    android:layout_width = "wrap_content"
+	    android:layout_height = "wrap_content"
+	    android:background="@drawable/bg_btn_topleft"
+	    android:orientation="horizontal"
+	    android:layout_alignParentRight="true"
+	    >
+	    
+		<ImageView 
+		    android:src="@drawable/btn1"
+		    android:layout_width = "wrap_content"
+		    android:layout_height = "wrap_content"
+		    android:id="@+id/stopbtn"
+		    />
+		<ImageView 
+		    android:id="@+id/btnpause"
+		    android:src="@drawable/btn2"
+		    android:layout_width = "wrap_content"
+		    android:layout_height = "wrap_content"
+		    />
+
+		
+
+		<ImageView 
+		    android:src="@drawable/btn3"
+		    android:layout_width = "wrap_content"
+		    android:layout_height = "wrap_content"
+		    android:id="@+id/playbtn"
+		    />
+		<ImageView 
+		    android:src="@drawable/btn4"
+		    android:layout_width = "wrap_content"
+		    android:layout_height = "wrap_content"
+		    android:id="@+id/replay"/>
+		<ImageView 
+		    android:id="@+id/volmain"
+		    android:src="@drawable/btn5new"
+		    android:layout_width = "wrap_content"
+		    android:layout_height = "wrap_content"
+		    />
+		
+	
+
+			
+		    
+			
+		
+		<ImageView 
+		    android:src="@drawable/btn7"
+		    android:layout_width = "wrap_content"
+		    android:layout_height = "wrap_content"
+		    />
+	    
+	</LinearLayout>
+	    
+	    <RelativeLayout
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignParentRight="true"
+			    android:layout_marginTop="30dp" android:layout_marginRight="34dp" android:id="@+id/volcontrol" android:visibility="invisible">
+			    <ImageView 
+			    android:id="@+id/btnRedu"
+			    android:src="@drawable/btnreduce"
+			    android:layout_width = "wrap_content"
+			    android:layout_height = "wrap_content"
+				android:layout_marginLeft="0dp"
+			    />
+				<ImageView 
+			    	android:id="@+id/btnIncr"
+				    android:src="@drawable/btnincrease"
+				    android:layout_width = "wrap_content"
+				    android:layout_height = "wrap_content"
+					android:layout_marginLeft="40dp"
+				/>
+			</RelativeLayout>
+	    
+	    <ScrollView 
+	        android:layout_width="610dp"
+	        android:layout_height="340dp"
+	        android:layout_centerHorizontal="true"
+	        android:layout_alignParentBottom="true"
+	        android:layout_marginBottom="50dp"
+	        >
+	        <LinearLayout 
+	            android:layout_width="610dp"
+	            android:layout_height="fill_parent"
+	            android:orientation="vertical"
+				
+	            >
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="Glamorouse Sky"
+	                android:textSize="15sp"
+	                android:id="@+id/song111"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="Hioiro (Glay Cover)"
+	                android:textSize="15sp"
+	                android:id="@+id/song222"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="แปดโมงเช้าวันอังคาร"
+	                android:textSize="15sp"
+	                android:id="@+id/song1"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="ทุ่งสีดำ"
+	                android:textSize="15sp"
+	                android:id="@+id/song2"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="ความทรงจำสีจาง"
+	                android:textSize="15sp"
+	                android:id="@+id/song3"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="อยากร้องดังๆ"
+	                android:textSize="15sp"
+	                android:id="@+id/song4"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="พูดไม่เต็มปาก"
+	                android:textSize="15sp"
+	                android:id="@+id/song4"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="ทำเป็นไม่ทัก"
+	                android:textSize="15sp"
+	                android:id="@+id/song5"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="กุญแจที่หายไป"
+	                android:textSize="15sp"
+	                android:id="@+id/song6"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="ฟ้าส่งฉันมา"
+	                android:textSize="15sp"
+	                android:id="@+id/song7"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="กา กา กา"
+	                android:textSize="15sp"
+	                android:id="@+id/song8"
+	                ></TextView>
+	            
+	            
+	            
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="แปดโมงเช้าวันอังคาร"
+	                android:textSize="15sp"
+	                android:id="@+id/song9"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="ทุ่งสีดำ"
+	                android:textSize="15sp"
+	                android:id="@+id/song10"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="ความทรงจำสีจาง"
+	                android:textSize="15sp"
+	                android:id="@+id/song11"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="อยากร้องดังๆ"
+	                android:textSize="15sp"
+	                android:id="@+id/song12"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="พูดไม่เต็มปาก"
+	                android:textSize="15sp"
+	                android:id="@+id/song13"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="ทำเป็นไม่ทัก"
+	                android:textSize="15sp"
+	                android:id="@+id/song14"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="กุญแจที่หายไป"
+	                android:textSize="15sp"
+	                android:id="@+id/song15"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="ฟ้าส่งฉันมา"
+	                android:textSize="15sp"
+	                android:id="@+id/song16"
+	                ></TextView>
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/linetxt"
+	                android:layout_marginBottom="9dp"
+	                android:text="กา กา กา"
+	                android:textSize="15sp"
+	                android:id="@+id/song17"
+	                ></TextView>
+	        </LinearLayout>
+	    </ScrollView>
+	    <ImageView 
+	    android:src="@drawable/close"
+	    android:id="@+id/close"
+	    android:layout_width = "wrap_content"
+	    android:layout_height = "wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_marginTop="0dp"
+	    />
+	</RelativeLayout>
+	
+</RelativeLayout>
+  

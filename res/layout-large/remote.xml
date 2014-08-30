@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bgremote"
+    tools:context=".Karaoke" 
+    >
+
+<!--     <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/bgremote" >
+    </ImageView> -->
+
+	<ImageView
+	    android:id="@+id/rsearch"
+	    android:layout_width="110dp"
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="62dp"
+	    android:layout_marginTop="0dp"
+	    android:src="@drawable/search" />
+    
+    <ImageView
+        android:id="@+id/remote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rsearch"
+        android:layout_below="@id/rsearch"
+        android:layout_marginTop="41dp"
+        android:src="@drawable/swap"
+        android:visibility="gone" />
+    
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="360dp"
+        android:layout_alignTop="@+id/rsearch"
+        android:layout_marginLeft="72dp"
+        android:layout_marginTop="30dp"
+        android:layout_toRightOf="@+id/rsearch"
+        android:src="@drawable/line2" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rsearch"
+        android:layout_below="@+id/rsearch"
+        android:layout_marginLeft="-55dp"
+        android:layout_marginTop="-15dp"
+        android:gravity="center"
+        android:text="SEARCH"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/TextView02"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/textView1"
+            android:layout_below="@+id/remote"
+            android:gravity="center"
+            android:text="REMOTE and PLAYLIST"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/r1"
+        android:layout_width="fill_parent"
+        android:layout_height="500dp"
+        android:layout_toRightOf="@id/imageView1" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="560dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical" >
+
+            <com.terlici.dragndroplist.DragNDropListView
+                android:id="@+id/listView1"
+                android:layout_width="fill_parent"
+                android:layout_height="360dp" 
+                android:cacheColorHint="#00000000"
+            />
+            
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/remoteswap"
+            android:layout_width="fill_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="340dp"
+            android:visibility="invisible" >
+
+            <TextView
+                android:id="@+id/textView01"
+                android:layout_width="450dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="false"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="40dp"
+                android:text="กรุณาทำการเลือกคิวเพลง โดยการกดที่ชื่อเพลงในฝั่งรายการด้านบน หลังจากที่เลือกคิวเพลงเสร็จเรียบร้อย ให้กดที่ปุ่มเพื่อทำการยืนยัน"
+                android:textSize="24dp" />
+
+            <Button
+                android:id="@+id/btndone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="550dp"
+                android:layout_marginTop="68dp"
+                android:gravity="left"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:text="Done"
+                android:textSize="26dp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/remotepanel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="400dp" >
+
+        <ImageView
+            android:id="@+id/rplay"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/play" />
+
+        <ImageView
+            android:id="@+id/rstop"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/rplay"
+            android:layout_marginLeft="40dp"
+            android:layout_toRightOf="@id/rplay"
+            android:src="@drawable/stop" />
+        
+        <ImageView
+            android:id="@+id/rpause"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/rplay"
+            android:layout_marginLeft="40dp"
+            android:layout_toRightOf="@id/rstop"
+            android:src="@drawable/pause" />
+
+         <ImageView
+             android:id="@+id/rreplay"
+             android:layout_width="110dp"
+             android:layout_height="wrap_content"
+             android:layout_marginLeft="40dp"
+             android:layout_toRightOf="@id/rnext"
+             android:src="@drawable/playagain" />
+        
+        <!-- <ImageView
+            android:id="@+id/btnmv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/rnext"
+            android:src="@drawable/mv" /> -->
+
+      <!--   <ImageView
+            android:id="@+id/btnSwitchSound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="350dp"
+            android:layout_marginTop="75dp"
+            android:src="@drawable/karaoke" /> -->
+
+        <ImageView
+            android:id="@+id/rprev"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_toRightOf="@id/rpause"
+            android:src="@drawable/prev" />
+
+        <ImageView
+            android:id="@+id/rnext"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_toRightOf="@id/rprev"
+            android:src="@drawable/next" />
+
+        <ImageView
+            android:id="@+id/rmute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="245dp"
+            android:layout_marginTop="75dp"
+            android:src="@drawable/rmute"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/rvol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="140dp"
+            android:layout_marginTop="75dp"
+            android:src="@drawable/rvol"
+            android:visibility="gone" />
+
+        <!-- <ImageView
+            android:id="@+id/rsearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="75dp"
+            android:src="@drawable/rsearch" /> -->
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/btnSwitchSound"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rsearch"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="0dp"
+        android:src="@drawable/kara" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_marginTop="365dp"
+        android:gravity="center"
+        android:text="VOLUME"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <SeekBar
+        android:id="@+id/volbar"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView01"
+        android:layout_alignRight="@+id/TextView01"
+        android:layout_marginTop="330dp" />
+
+    <TextView
+        android:id="@+id/TextView03"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/volbar"
+        android:layout_below="@+id/btnSwitchSound"
+        android:layout_marginTop="-15dp"
+        android:gravity="center"
+        android:text="KARAOKE"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</RelativeLayout>

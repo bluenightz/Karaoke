@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bgremote"
+    tools:context=".Karaoke" 
+    >
+
+<!--     <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/bgremote" >
+    </ImageView> -->
+
+	<ImageView
+        android:id="@+id/rsearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="42dp"
+        android:layout_marginTop="55dp"
+        android:src="@drawable/search" />
+    
+    <ImageView
+        android:id="@+id/remote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rsearch"
+        android:layout_below="@id/rsearch"
+        android:layout_marginTop="41dp"
+        android:src="@drawable/swap"
+        android:visibility="gone" />
+    
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="500dp"
+        android:layout_alignTop="@+id/rsearch"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="-40dp"
+        android:layout_toRightOf="@+id/rsearch"
+        android:src="@drawable/line2" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rsearch"
+        android:layout_below="@+id/rsearch"
+        android:layout_marginLeft="-35dp"
+        android:gravity="center"
+        android:text="SEARCH"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/TextView02"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/textView1"
+            android:layout_below="@+id/remote"
+            android:gravity="center"
+            android:text="REMOTE and PLAYLIST"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/r1"
+        android:layout_width="fill_parent"
+        android:layout_height="500dp"
+        android:layout_toRightOf="@id/imageView1" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="560dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/listView1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+            </ListView>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/remotepanel"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/imageView1"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="10dp" >
+
+        <ImageView
+            android:id="@+id/rplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/play" />
+
+        <ImageView
+            android:id="@+id/rstop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/rplay"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/rplay"
+            android:src="@drawable/stop" />
+        
+        <ImageView
+            android:id="@+id/rpause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/rplay"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/rstop"
+            android:src="@drawable/pause" />
+
+        <ImageView
+            android:id="@+id/btnSwitchSound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="350dp"
+            android:layout_marginTop="75dp"
+            android:src="@drawable/karaoke"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/rprev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/rpause"
+            android:src="@drawable/prev" />
+
+        <ImageView
+            android:id="@+id/rnext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/rprev"
+            android:src="@drawable/next" />
+
+        <ImageView
+            android:id="@+id/rreplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/rnext"
+            android:src="@drawable/playagain" />
+
+        <ImageView
+            android:id="@+id/rmute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="245dp"
+            android:layout_marginTop="75dp"
+            android:src="@drawable/rmute"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/rvol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="140dp"
+            android:layout_marginTop="75dp"
+            android:src="@drawable/rvol"
+            android:visibility="gone" />
+
+        <SeekBar
+            android:id="@+id/volbar"
+            android:layout_width="148dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/rvol"
+            android:layout_alignLeft="@+id/rvol"
+            android:layout_marginBottom="37dp"
+            android:layout_marginLeft="25dp"
+            android:visibility="gone" />
+
+        <!-- <ImageView
+            android:id="@+id/rsearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="75dp"
+            android:src="@drawable/rsearch" /> -->
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/remoteswap"
+        android:layout_width="370dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/r1"
+        android:visibility="invisible" >
+
+        <Button
+            android:id="@+id/btndone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="205dp"
+            android:layout_marginTop="245dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="Done"
+            android:textSize="26dp" />
+
+        <TextView
+            android:id="@+id/textView01"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="40dp"
+            android:text="กรุณาทำการเลือกคิวเพลง โดยการกดที่ชื่อเพลงในฝั่งรายการด้านซ้าย หลังจากที่เลือกคิวเพลงเสร็จเรียบร้อย ให้กดที่ปุ่มเพื่อทำการยืนยัน"
+            android:textSize="24dp" />
+    </RelativeLayout>
+
+</RelativeLayout>
