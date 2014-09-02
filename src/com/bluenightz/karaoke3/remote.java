@@ -144,13 +144,10 @@ public class remote extends Activity{
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	
+    	Log.d("remote.java","Start Activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote);
-        
         String _l = Lang.getLang();
-        Log.d("remote.java","Start Activity");
-        
         s = PreferenceManager.getDefaultSharedPreferences(this);
         ip = s.getString("ip", null);
         
@@ -164,8 +161,8 @@ public class remote extends Activity{
         
         webPath = "/karaoke/";
         serverpath = "http://"+ip+"/karaoke/";
-        urlstatus = serverpath+"playlist.php";
-    	urlcommand = serverpath+"playlsit.php?";
+        urlstatus = serverpath+"playlist.php?MODE=status";
+    	urlcommand = serverpath+"playlist.php?";
     	urlplaylist = serverpath+"playlist.php";
         newplaylist = serverpath+"control.php";
         
@@ -199,6 +196,7 @@ public class remote extends Activity{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				String cmdurl = urlcommand+"MODE=pl_pause";
+				Log.d("remote.java urlstatus = ",urlstatus);
 		    	
 		    	try{
 		    		final InputStream is1 = new URL(cmdurl).openStream();
@@ -215,6 +213,7 @@ public class remote extends Activity{
 				// TODO Auto-generated method stub
 				Intent i = new Intent(remote.this, search.class); 
 				startActivity(i);
+				Log.d("remote.java urlstatus = ",urlstatus);
 			}
 		});
         
@@ -222,6 +221,7 @@ public class remote extends Activity{
         mutebtn.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
+				Log.d("remote.java urlstatus = ",urlstatus);
 				// TODO Auto-generated method stub   
 				if(mutestat==true){
 					cmd("nomute","");
@@ -238,9 +238,10 @@ public class remote extends Activity{
         replaybtn.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
+				Log.d("remote.java urlstatus = ",urlstatus);
 				// TODO Auto-generated method stub
 		    	String cmdurl = urlcommand+"MODE=seek&val=0";
-		    	
+		    	Log.d("remote.java urlstatus = ",urlstatus);
 		    	try{
 		    		final InputStream is1 = new URL(cmdurl).openStream();
 		    	}catch(Exception e){
@@ -271,7 +272,6 @@ public class remote extends Activity{
 			if(data.size() > 0){  
 				
 				cmd("play",String.valueOf(0));
-
 				String _timestr = data.get(0).time;
 				int _timeint = Integer.valueOf(_timestr)/1000-1500;
 
@@ -311,14 +311,14 @@ public class remote extends Activity{
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				 	
 					String cmdurl = urlcommand+"MODE=pl_play&id="+playlist.currentID;
 					
-					String _timestr = tempforplayagain.time;
-					int _timeint = Integer.valueOf(_timestr)/1000-1500;
-					Log.e("###show time ####",String.valueOf(_timeint));
-					karaokeTimeManage.clear();
-					karaokeTimeManage.buildTime(_timeint, _timeint, true);
+					//String _timestr = tempforplayagain.time; comment by ton
+					//int _timeint = Integer.valueOf(_timestr)/1000-1500; comment by ton
+					//Log.e("###show time ####",String.valueOf(_timeint));
+					//karaokeTimeManage.clear();
+					//karaokeTimeManage.buildTime(_timeint, _timeint, true);
 					
 		    	
 		    	try{
@@ -378,19 +378,22 @@ public class remote extends Activity{
         	btnSwitchSound.setOnClickListener(new View.OnClickListener() {
 				
 				public void onClick(View v) {
-					// TODO Auto-generated method stub      
+					// TODO Auto-generated method stub
+					Log.d("remote.java btnSwitchSound","clicked");
 					String cmdurl = null;
-					
 					int soundC = (playlist.soundChannel<2) ? ++playlist.soundChannel : (playlist.soundChannel=0);
 					if(soundC==0){
 						//100%,100%
-						cmdurl = "http://"+serverpath+"/sound.php?R=100&L=100";
+						cmdurl = "http://"+serverpath+"sound.php?R=100&L=100";
+						Log.d("remote.java cmdurl = ",cmdurl);
 					}else if(soundC==1){
 						//0%,100%
-						cmdurl = "http://"+serverpath+"/sound.php?R=0&L=100";
+						cmdurl = "http://"+serverpath+"sound.php?R=0&L=100";
+						Log.d("remote.java cmdurl = ",cmdurl);
 					}else if(soundC==2){
 						//100%,0%
-						cmdurl = "http://"+serverpath+"/sound.php?R=100&L=0";
+						cmdurl = "http://"+serverpath+"sound.php?R=100&L=0";
+						Log.d("remote.java cmdurl = ",cmdurl);
 					}
 					
 					   
@@ -406,12 +409,15 @@ public class remote extends Activity{
 			});
          
         
-        Log.d("remote.java","set Seek Bar");
+        
         volbar1 = (SeekBar) findViewById(R.id.volbar);
         volbar1.setProgress(50);
+        Log.d("remote.java","Setup Seek Bar");
         volbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-    	 int num = 500;
-         int vol = 0;
+        
+    	 //int num = 500; comment by ton
+        int num = 255;
+        int vol = 0;
              
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				// TODO Auto-generated method stub
@@ -423,7 +429,7 @@ public class remote extends Activity{
 		    		
 		    	}
 			}
-			
+
 			public void onStartTrackingTouch(SeekBar seekBar) {
 				// TODO Auto-generated method stub
 				Log.d("remote.java Seekbar","onStartTrackingTouch");
@@ -433,32 +439,41 @@ public class remote extends Activity{
 					boolean fromUser) {
 				// TODO Auto-generated method stub
 				Log.d("remote.java Seekbar","onProgressChanged");
-				num = 500;
-				vol = (int) Math.ceil((progress*500)/100);
-				
-		    	 
+				//num = 500; comment by ton
+				num = 255;
+				vol = (int) Math.ceil((progress*255)/100);
+		    	Log.d("remote.java vol = ", Integer.toString(vol));
 			}
-		});
+		
+			
+        });
 		
         
           //final ListView l = (ListView) findViewById(R.id.listView1);
-          //data = _parseXml(urlplaylist);
+          data = _parseXml(urlplaylist);
           
           data = _parseXml(newplaylist);
+          Log.d("remote.java","setup New PLaytlist Data");
           int firstremove = 0;
-          //if(){
+          Log.d("remote.java firstremove = ","Initial Value for firstremove");
 	          for(int i = 0; i < data.size(); ++i){
 	        	  if(data.get(i).id.equals(playlist.currentID)){
 	        		  firstremove = i;
+	        		  Log.d("remote.java","firstremove");
 	        	  }
+	        	  Log.d("remote.java firstremove = ","Finish Loop");
 	          }
-          //}
+	      Log.d("remote.java firstremove = ","Exit from Loop"); 
           
-	      tempforplayagain = data.get(firstremove);
-          data.remove(firstremove);
+	      // comment by ton disable for error after start activity
+	      //tempforplayagain = data.get(firstremove);
+	      //Log.d("remote.java tempforplayagain = ","Set Data for tempforplayagain");
+          //data.remove(firstremove);
+          //Log.d("remote.java remove(firstremove) = ","Set Data for remove(firstremove)");
           
-          playlist.updateplaylist(data);
-          
+          //playlist.updateplaylist(data);
+          //Log.d("remote.java"," playlist.updateplaylist");
+          // end comment by ton
           
           final DragNDropListView l = (DragNDropListView) findViewById(R.id.listView1);
 	  		items = new ArrayList<Map<String, Object>>();
@@ -467,8 +482,8 @@ public class remote extends Activity{
 	  			item.put("name", data.get(i).name );
 	  			item.put("_id", data.get(i).id );
 	  			item.put("_current", data.get(i).current );
-	  			item.put("path", data.get(i).path );
-	  			item.put("time", data.get(i).time );
+	  			//item.put("path", data.get(i).path );
+	  			//item.put("time", data.get(i).time );
 	
 	  			items.add(item);
 	  		}  
@@ -585,8 +600,9 @@ public class remote extends Activity{
 									
 									
 									playlist._index = selectedIndex;
+									Log.d("remote.java playlist._index = ",Integer.toString(playlist._index));
 									playlist.currentID = currentid;
-									
+									Log.d("remote.java playlist.currentID = ",playlist.currentID);
 									Handler handler = new Handler();
 									handler.postDelayed(new Runnable(){
 									@Override
@@ -596,25 +612,26 @@ public class remote extends Activity{
 									}, 1000);
 									
 								}else if(s.equals("Cancel")){
+									Log.d("remote.java","Cancel");
 									int testnum = arg2;
 									Log.e("testnum", String.valueOf(testnum));
 								}else if(s.equals("Delete")){
-									  
+									Log.d("remote.java","Delete");
 									if(playlist.currentID.toString().equals(String.valueOf(data.get(selectedIndex).id))){
 										final String _cmdurl = urlcommand+"MODE=pl_delete&id="+data.get(selectedIndex).id;
+										Log.d("remote.java _cmdurl = ",_cmdurl);
 										String cmdurlplay = urlcommand+"MODE=pl_next";
+										Log.d("remote.java _cmdurl = ",_cmdurl);
 										try{
 								    		final InputStream is = new URL(cmdurlplay).openStream();
 								    	}catch(Exception e){
 								    		
 								    	}
-										
 										final Handler handler = new Handler();
 										handler.postDelayed(new Runnable() {
 										  @Override
 										  public void run() {
 										    //Do something after 100ms
-
 											  if(data.size() > 0){
 												data.remove(selectedIndex); 
 												items.remove(selectedIndex);
@@ -622,14 +639,13 @@ public class remote extends Activity{
 												try{
 											    		final InputStream is = new URL(_cmdurl).openStream();
 											    		playlist.currentID = data.get(playlist._index).id;
+											    		Log.d("remote.java playlist.currentID = ",playlist.currentID);
 											    		song nextsong = data.get(playlist._index);
 											    		String _timestr = String.valueOf(nextsong.time);
 														int _timeint = Integer.valueOf(_timestr)/1000-1900;
 														karaokeTimeManage.clear();
 														karaokeTimeManage.buildTime(_timeint, _timeint, true);
-													
 										    	}catch(Exception e){
-										    		
 										     	}
 											  }
 						  				
@@ -639,8 +655,9 @@ public class remote extends Activity{
 									}else{
 										
 								   		cmdurl = urlcommand+"MODE=pl_delete&id="+data.get(selectedIndex).id;
+								   		Log.d("remote.java cmdurl = ",cmdurl);
 										String cmdurlplay = urlcommand+"MODE=pl_next";
-										
+										Log.d("remote.java cmdurlplay = ",cmdurlplay);
 										data.remove(selectedIndex); 
 										items.remove(selectedIndex);
 										_a.notifyDataSetChanged();
@@ -751,13 +768,14 @@ public class remote extends Activity{
     	
     	if(method == "add"){
     		//cmdurl = urlcommand+"command=in_play&input="+pathtovideo+url;
-    		cmdurl = urlcommand+"MODE=in_enqueue&input="+pathtovideo+url;
+    		cmdurl = urlcommand+"MODE=in_enqueue&id="+pathtovideo+url;
+    		
     	}
     	if(method == "addnopath"){
-    		cmdurl = urlcommand+"MODE=in_enqueue&input="+url;
+    		cmdurl = urlcommand+"MODE=in_enqueue&id="+url;
     	}
     	if(method == "revsort"){
-    		cmdurl = urlcommand+"MODE=in_enqueue&input="+pathtovideo+url;
+    		cmdurl = urlcommand+"MODE=in_enqueue&id="+pathtovideo+url;
     	}
     	if(method == "play"){
     		cmdurl = urlcommand+"MODE=pl_play&id="+data.get(Integer.valueOf(url)).id; 

@@ -223,15 +223,13 @@ public class result extends Activity{
         more.title = "No more result...";
         if(data.size()==20){
         	data.add(more);
-        }  
-          
+        } 
         
         _a = new AlbumListAdapter(result.this, R.layout.row_pic_layout, data);
         l.setAdapter(_a);
         
         l.setOnItemClickListener(new OnItemClickListener(){
-
-		
+        	
 			public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
@@ -241,10 +239,9 @@ public class result extends Activity{
 				AlertDialog.Builder alertB = new AlertDialog.Builder(result.this);
 				alertB.setTitle("Choose Action");
 				
-				
 				if(arg2 == l.getCount()-1 && l.getCount() > 20 ){
 					++page;
-					 
+					
 					int m = l.getCount();
 					data.remove(m-1);
 					
@@ -255,16 +252,13 @@ public class result extends Activity{
 					
 					data.addAll(datamore);
 					
-						
 					Data more = new Data();
 			        more.title = "No more result...";
 			        data.add(more);
-						
-						
+			        
 					_a.notifyDataSetChanged();
 					
 					l.smoothScrollToPosition(m);
-					
 					
 					_a.notifyDataSetChanged();
 				}else{
@@ -279,17 +273,58 @@ public class result extends Activity{
 						
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
-							
-							
 							List<Data> List = _parseXml(newplaylist); 
-							String s = (List.size()==0)?"Play":(String) c[which];
-
+							//String s = (List.size()==0)?"Play":(String) c[which]; //comment by ton
+							Log.d("result.java s = ",s.toString());
+							Log.d("result.java playlist.mvmode =", Boolean.toString(playlist.mvmode));
+							
 							if(playlist.mvmode == true){
 								cmd("empty","");
-								playlist.mvmode=false;  
-							} 
+								playlist.mvmode=false;
+								Log.d("result.java playlist.mvmode =", Boolean.toString(playlist.mvmode));
+							}
+							switch(which){
+							case 0: {
+									Log.d("result.java ","Add to Queue");
+									final String file = urlencode(_songurlobject.url);
+									Log.d("result.java file = ",file);
+									cmd("add",file);
+									List = _parseXml(newplaylist);
+									Data ss = List.get(List.size()-1);
+									song _s = new playlist().new song();
+									_s.id = ss.id;
+									_s.path = ss.path;
+									_s.time = Integer.valueOf(ss.time);
+									playlist.addsong(_s);
+							}
+									break;
+							case 1: {
+									final String file = urlencode(_songurlobject.url);
+									cmd("play",file);
+									List = _parseXml(newplaylist);
+									Data ss = List.get(List.size()-1);
+									song _s = new playlist().new song();
+									_s.id = ss.id;
+									_s.path = ss.path;   
+									_s.time = Integer.valueOf(ss.time);
+									playlist.addsong(_s);
+									playlist._index = 0;
+									playlist.currentID = ss.id;
+									String _timestr = ss.time;
+									int _timeint = Integer.valueOf(_timestr)/1000-1500;
+									Log.e("###show time ####",String.valueOf(_timeint));
+									}
+									break;
+							case 2: 
+									Log.d("result.java ","cancle");
+									break;
+							default :
+									break;
+							
+							}
+							/* comment by ton
 							if(s.equals("Add to Queue")){
-								
+								Log.d("result.java ","Add to Queue");
 								final String file = urlencode(_songurlobject.url);
 								Log.d("result.java file = ",file);
 								cmd("add",file);
@@ -301,7 +336,8 @@ public class result extends Activity{
 								_s.time = Integer.valueOf(ss.time);
 								playlist.addsong(_s);
 								
-							}else if(s.equals("Play")){  
+							}else if(s.equals("Play")){
+								Log.d("result.java ","Play");
 								final String file = urlencode(_songurlobject.url);
 									//if(playlist.gettotal() == 0){
 										cmd("play",file);
@@ -318,19 +354,18 @@ public class result extends Activity{
 										int _timeint = Integer.valueOf(_timestr)/1000-1500;
 										Log.e("###show time ####",String.valueOf(_timeint));
 										
-								
-								
 							}else if(s.equals("Cancel")){
+								Log.d("result.java ","cancle");
 								
-								Log.e("to cancel","");
 							}
+							*/
 							
 							
 						}
 					});
 					AlertDialog alert = alertB.create();
-					alert.show();
 					
+					alert.show();
 					
 					}else{
 						alertB.setTitle("Alert Message");

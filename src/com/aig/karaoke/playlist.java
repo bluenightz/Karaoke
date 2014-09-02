@@ -36,6 +36,7 @@ public class playlist {
 	
 	
 	public static void insertnewplaylist(List<com.bluenightz.karaoke3.remote.song> p){
+		Log.d("playlist.java","insertnewplaylist");
 		ArrayList<song> _p = new ArrayList<song>();
 		for(int a = 0 ; a < p.size() ; ++a){
 			playlist ppp = new playlist();
@@ -50,11 +51,13 @@ public class playlist {
 	}
 	
 	public static boolean isplaylistnull(){
+		Log.d("playlist.java","isplaylistnull");
 		boolean b = (pl==null)?true:false;
 		return b;
 	}
 	
 	public static int findindexfromid(String id){
+		Log.d("playlist.java","findindexfromid");
 		int index = 0;
 			for(int a = 0; a<pl.size() ;++a){
 				try{
@@ -71,36 +74,44 @@ public class playlist {
 	}
 	
 	public static void setindex(int i){
+		Log.d("playlist.java","setindex");
 		_index = i;
 	}
 	
 	public static void buildplaylist(){
+		Log.d("playlist.java","buildplaylist");
 		pl = new ArrayList<song>();
 	}
 	
 	public static ArrayList<song> getplaylist(){
+		Log.d("playlist.java","getplaylist");
 		ArrayList<song> _pl = pl;
 		return _pl;
 	}
 	
 	public static void addsong(song _s){
+		Log.d("playlist.java","addsong");
 		pl.add(_s);
 	}
 	
 	public static void addsongat(int i, song s){
+		Log.d("playlist.java","addsongat");
 		pl.add(i, s);
 	}
 	
 	public static void setcurrentID(String i){
+		Log.d("playlist.java","setcurrentID");
 		currentID = i;
 	}
 	
 	public static song getnowsong(){
+		Log.d("playlist.java","getnowsong");
 		song s = getsong(Integer.valueOf(currentID));
 		return s;
 	}
 	
 	public static song getsong(int i){
+		Log.d("playlist.java","getsong");
 		song s = null;
 		try{
 			s = pl.get(i);
@@ -111,14 +122,17 @@ public class playlist {
 	}
 	
 	public static void deletesong(int i){
+		Log.d("playlist.java","deletesong");
 		pl.remove(i);
 	}
 	
 	public static void clearplaylist(){
+		Log.d("playlist.java","clearplaylist");
 		pl.clear();
 	}
 	
 	public static void updateplaylist(List<com.bluenightz.karaoke3.remote.song> data){
+		Log.d("playlist.java","updateplaylist");
 		//List<song> List = new ArrayList<song>();
 		pl.clear();
 		for(int i = 0 ; i < data.size()-1 ; ++i){
@@ -132,6 +146,7 @@ public class playlist {
 	}
 	 
 	public static int gettotal(){
+		Log.d("playlist.java","gettotal");
 		total = pl.size();
 		return total;
 	}
