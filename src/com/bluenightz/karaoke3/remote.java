@@ -163,8 +163,9 @@ public class remote extends Activity{
         serverpath = "http://"+ip+"/karaoke/";
         urlstatus = serverpath+"playlist.php?MODE=status";
     	urlcommand = serverpath+"playlist.php?";
-    	urlplaylist = serverpath+"playlist.php";
-        newplaylist = serverpath+"control.php";
+    	urlplaylist = serverpath+"playlist.php?MODE=playlist";
+        newplaylist = serverpath+"playlist.php?MODE=playlist";
+        
         
         
         Log.d("remote.java serverpath = ",serverpath);
@@ -197,6 +198,7 @@ public class remote extends Activity{
 				// TODO Auto-generated method stub
 				String cmdurl = urlcommand+"MODE=pl_pause";
 				Log.d("remote.java urlstatus = ",urlstatus);
+				Log.d("remote.java cmdurl = ",cmdurl);
 		    	
 		    	try{
 		    		final InputStream is1 = new URL(cmdurl).openStream();
@@ -285,8 +287,6 @@ public class remote extends Activity{
 				data.remove(0);
 				items.remove(0);
 
-				
-				
 				_a.notifyDataSetChanged();
 				playlist._index = 0;
 				playlist.currentID = currentid;
@@ -314,6 +314,8 @@ public class remote extends Activity{
 				 	
 					String cmdurl = urlcommand+"MODE=pl_play&id="+playlist.currentID;
 					
+					Log.d("remote.java","playbtn Clicked");
+					Log.d("remote.java cmdurl = ",cmdurl);
 					//String _timestr = tempforplayagain.time; comment by ton
 					//int _timeint = Integer.valueOf(_timestr)/1000-1500; comment by ton
 					//Log.e("###show time ####",String.valueOf(_timeint));
@@ -337,8 +339,11 @@ public class remote extends Activity{
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				/*
 				if(playlist._index != 0){
 					String cmdurl = urlcommand+"MODE=pl_previous";  
+					Log.d("remote.java","prev Clicked");
+					Log.d("remote.java cmdurl = ",cmdurl);
 					int v1 = Integer.valueOf(playlist._index)-1;
 					String v2 = data.get(v1).id;
 			    	playlist.currentID = v2;
@@ -348,7 +353,7 @@ public class remote extends Activity{
 			    	}catch(Exception e){
 			    		
 			    	}   
-				}
+				}*/
 			}
 		});
         
@@ -360,6 +365,8 @@ public class remote extends Activity{
 				// TODO Auto-generated method stub
 				if(playlist._index != data.size()-1 && data.size() > 0){
 					String cmdurl = urlcommand+"MODE=pl_next";
+					Log.d("remote.java","next Clicked");
+					Log.d("remote.java cmdurl = ",cmdurl);
 					int v1 = Integer.valueOf(playlist._index)+1;
 					String v2 = data.get(v1).id;
 			    	playlist.currentID = v2;
@@ -450,13 +457,17 @@ public class remote extends Activity{
 		
         
           //final ListView l = (ListView) findViewById(R.id.listView1);
-          data = _parseXml(urlplaylist);
+         
+          data = _parseXml(urlplaylist+'&'+Math.random());
+          //data = _parseXml(newplaylist);
           
-          data = _parseXml(newplaylist);
+          Log.d("remote.java data.size() = ",Integer.toString(data.size()));
+          
           Log.d("remote.java","setup New PLaytlist Data");
           int firstremove = 0;
           Log.d("remote.java firstremove = ","Initial Value for firstremove");
 	          for(int i = 0; i < data.size(); ++i){
+	        	  Log.d("remote.java firstremove = ","Into Loop");
 	        	  if(data.get(i).id.equals(playlist.currentID)){
 	        		  firstremove = i;
 	        		  Log.d("remote.java","firstremove");
@@ -470,12 +481,11 @@ public class remote extends Activity{
 	      //Log.d("remote.java tempforplayagain = ","Set Data for tempforplayagain");
           //data.remove(firstremove);
           //Log.d("remote.java remove(firstremove) = ","Set Data for remove(firstremove)");
-          
           //playlist.updateplaylist(data);
           //Log.d("remote.java"," playlist.updateplaylist");
           // end comment by ton
           
-          final DragNDropListView l = (DragNDropListView) findViewById(R.id.listView1);
+          final DragNDropListView l = (DragNDropListView) findViewById(R.id.listView1); //comment by ton
 	  		items = new ArrayList<Map<String, Object>>();
 	  		for(int i = 0; i < data.size(); ++i) {
 	  			HashMap<String, Object> item = new HashMap<String, Object>();
@@ -708,6 +718,7 @@ public class remote extends Activity{
     }
     
     public void addmv(List<Data> mv){
+    	Log.d("remote.java","addmv");
     	for(int i=0 ;i<mv.size(); ++i){
     		//cmd("addnopath",mv.get(i).path);
     	}
@@ -717,6 +728,7 @@ public class remote extends Activity{
     }
     
     public static void updatelist(){
+    	Log.d("remote.java","updatelist");
 //    	if(_a!=null){
 //    		_a.notifyDataSetChanged();
 //    	}
@@ -749,11 +761,10 @@ public class remote extends Activity{
     		View vs = (View) findViewById(R.id.remoteswap);
     		vs.setVisibility(0);
     		
-
     	}
     }
 
-    
+   
     private void cmd(String method, String url){
     	String cmdurl = null;
     
@@ -798,8 +809,10 @@ public class remote extends Activity{
     	}
     }
     
-    public List<song> _parseXml(String u) { 
-		  List<song> data = null; 
+   
+    public List<song> _parseXml(String u) {
+    	 Log.d("remote.java","create playlist data");
+		  //List<song> data = null; //comment by ton
 		  URL url ;
 		  // sax stuff 
 		  try { 
@@ -817,8 +830,6 @@ public class remote extends Activity{
 		     
 		    data = dataHandler.getData();
 		    
-		    
-		 
 		  } catch(ParserConfigurationException pce) { 
 		    Log.e("SAX XML", "sax parse error", pce); 
 		  } catch(SAXException se) { 
@@ -850,15 +861,12 @@ public class remote extends Activity{
 				View row=convertView;
 				AlbumListWrapper wrapper=null;
 				int type = getItemViewType(position);
-				//Log.e("txt",""+type);
 				if (row==null) {													
 					LayoutInflater inflater=getLayoutInflater();
 					
-					//if(type!=1){
-						//row=inflater.inflate(R.layout.row_pic_layout, null);
-					//}else{
+					
 						row=inflater.inflate(R.layout.row_moreresult, null);
-					//} 
+
 					wrapper=new AlbumListWrapper(row);
 					row.setTag(wrapper);
 				}

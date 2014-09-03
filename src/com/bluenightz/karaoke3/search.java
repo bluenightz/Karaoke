@@ -162,7 +162,7 @@ public class search extends Activity{
 				public void onClick(View v) {
 
 					//if(playlist.gettotal()!=0){
-					int total = playlist.pl.size();
+					int total = playlist.pl.size(); //error
 					if(true){
 					//if(total != 0){
 						Intent i = new Intent(search.this, remote.class);

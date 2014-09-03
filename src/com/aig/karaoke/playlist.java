@@ -32,6 +32,7 @@ public class playlist {
 	
 	public playlist(){
 		//thisclass = this;
+		Log.d("playlist.java","Into this class");
 	}
 	
 	
@@ -42,12 +43,17 @@ public class playlist {
 			playlist ppp = new playlist();
 			song __s = ppp.new song();
 			__s.id = p.get(a).id;
+			Log.d("playlist.java __s.id = ",__s.id);
 			__s.name = p.get(a).name;
-			__s.time = Integer.valueOf(p.get(a).time);
-			__s.path = p.get(a).path;
+			//__s.time = Integer.valueOf(p.get(a).time); //comment by ton
+			//__s.path = p.get(a).path; //comment by ton
 			_p.add(__s);
 		}
+		Log.d("playlist.java","pl");
 		pl = _p;
+		if(pl == null){
+			Log.d("playlist.java pl =","null");
+		}
 	}
 	
 	public static boolean isplaylistnull(){
@@ -76,6 +82,8 @@ public class playlist {
 	public static void setindex(int i){
 		Log.d("playlist.java","setindex");
 		_index = i;
+		Log.d("playlist.java","setindex");
+		Log.d("playlist.java _index = ",Integer.toString(_index));
 	}
 	
 	public static void buildplaylist(){
@@ -102,11 +110,14 @@ public class playlist {
 	public static void setcurrentID(String i){
 		Log.d("playlist.java","setcurrentID");
 		currentID = i;
+		Log.d("playlist.java",currentID);
+		
 	}
 	
 	public static song getnowsong(){
 		Log.d("playlist.java","getnowsong");
 		song s = getsong(Integer.valueOf(currentID));
+		Log.d("playlist.java s = ",s.toString());
 		return s;
 	}
 	
@@ -115,9 +126,11 @@ public class playlist {
 		song s = null;
 		try{
 			s = pl.get(i);
+			
 		}catch(Exception e){
 			
 		}
+		Log.d("playlist.java s = ",s.toString());
 		return s;
 	}
 	
@@ -134,20 +147,22 @@ public class playlist {
 	public static void updateplaylist(List<com.bluenightz.karaoke3.remote.song> data){
 		Log.d("playlist.java","updateplaylist");
 		//List<song> List = new ArrayList<song>();
-		pl.clear();
+		pl.clear(); // comment by ton
 		for(int i = 0 ; i < data.size()-1 ; ++i){
 			remote rr = new remote();
 			com.bluenightz.karaoke3.remote.song _s = rr.new song();
 			_s.id = data.get(i).id;
 			_s.name = data.get(i).name;
-			_s.path = data.get(i).path;
-			_s.time = data.get(i).time;
+			//_s.path = data.get(i).path;
+			//_s.time = data.get(i).time;
 		}
+		
 	}
 	 
 	public static int gettotal(){
 		Log.d("playlist.java","gettotal");
 		total = pl.size();
+		Log.d("playlist.java total = ",Integer.toString(total));
 		return total;
 	}
 	
@@ -162,14 +177,17 @@ public class playlist {
 			return name;
 		}
 		public  String getid(){
+			Log.d("playlist.java getid()",id);
 			return id;
 		}
+		/*
 		public  long gettime(){
 			return time;
 		}
 		public  String getpath(){
 			return path;
 		}
+		*/
 	}
 	
   

@@ -168,8 +168,8 @@ public class result extends Activity{
         webPath = "/karaoke/";
         serverpath = "http://"+ip+webPath;
         urlcommand = serverpath+"playlist.php?";
-    	urlplaylist =serverpath+"playlist.php";
-    	newplaylist = serverpath+"control.php";
+    	urlplaylist =serverpath+"playlist.php?MODE=playlist";
+    	newplaylist = serverpath+"control.php?MODE=playlist";
     	
     	
     	
@@ -185,12 +185,12 @@ public class result extends Activity{
         remote = (ImageView) findViewById(R.id.remote);
         remote.setOnClickListener(new View.OnClickListener() {
 		
-
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
 				//if(playlist.gettotal()!=0){
 				int total = playlist.pl.size();
+				Log.d("result.java total = ",Integer.toString(total));
 				//if(total != 0){
 				if(true){
 					Intent i = new Intent(result.this, remote.class);
@@ -207,9 +207,6 @@ public class result extends Activity{
 				}
 			}
 		});
-        
-        
-        
         
         
         Log.e("txt",_urlSearch);
@@ -621,6 +618,7 @@ public class result extends Activity{
     	return _url;
     }
     //
+    
     public List<Data> _parseXml(String u) { 
 		  List<Data> data = null; 
 		  URL url ;
@@ -634,13 +632,8 @@ public class result extends Activity{
 		 
 		    DataHandler dataHandler = new DataHandler(); 
 		    xr.setContentHandler(dataHandler); 
-		    //InputStream ins = getResources().openRawResource(R.raw.data);
-		    //xr.parse(new InputSource(ins)); 
 		    xr.parse(new InputSource(url.openStream()));
-		     
 		    data = dataHandler.getData();
-		    
-		    
 		 
 		  } catch(ParserConfigurationException pce) { 
 		    Log.e("SAX XML", "sax parse error", pce); 
@@ -691,7 +684,7 @@ public class result extends Activity{
 					data.remove(m-1);
 					
 					_urlSearch = serverpath+"webservice.php?type=search&mode="+modestr+"&name="+searchstr+"&page="+page+"&clrcache="+Math.random();
-					
+					Log.d("result.java _urlSearch = ",_urlSearch);
 					
 					datamore = _parseXml(_urlSearch);
 					
