@@ -304,6 +304,7 @@ public class result extends Activity{
 									Data ss = List.get(List.size()-1);
 									song _s = new playlist().new song();
 									_s.id = ss.id;
+									
 									//_s.path = ss.path; //comment by ton
 									//_s.time = Integer.valueOf(ss.time); //comment by ton
 									playlist.addsong(_s);
@@ -321,9 +322,8 @@ public class result extends Activity{
 									playlist.addsong(_s);
 									playlist._index = 0;
 									playlist.currentID = ss.id;
-									String _timestr = ss.time;
-									int _timeint = Integer.valueOf(_timestr)/1000-1500;
-									Log.e("###show time ####",String.valueOf(_timeint));
+									//String _timestr = ss.time; comment by ton
+									//int _timeint = Integer.valueOf(_timestr)/1000-1500; comment by ton
 									}
 									break;
 							case 2: 
@@ -930,7 +930,7 @@ public class result extends Activity{
 			  _data = new Data();
 		      Datas.add(_data);
 			  _data.id = atts.getValue("id");
-			  _data.time = atts.getValue("duration");
+			  //_data.time = atts.getValue("duration"); //comment by ton
 			  _inleaf = true;
 			} else if(localName.equals("id")){
 				_inId = true;
@@ -1006,10 +1006,11 @@ public class result extends Activity{
 		    } else if(_inName){
 		      _data.title = chars.toString();
 		    } else if(_inUrl){
-		    	_data.path = chars.toString();
+		    	//_data.path = chars.toString();// comment by ton
 		    } else if(_inDuration){
+		    	
 		    } else if(_inPlaytime){
-		      _data.time = chars.toString();
+		      //_data.time = chars.toString(); // comment by ton
 		      Log.e("We're in playtime Node","Yes, We are.");
 		    }else if(_inId){
 			  _data.id = chars.toString();
@@ -1023,6 +1024,7 @@ public class result extends Activity{
 	
 	public class Data { 
 		  // I know this could be an int, but this is just to show you how it works 
+		  public String id="";
 		  public String title = ""; 
 		  public String artist = ""; 
 		  public String album = ""; 
@@ -1031,10 +1033,11 @@ public class result extends Activity{
 		  public String songurl= "";
 		  public String songurl1= "";
 		  public String songurl2= "";
-		  public String id="";
+		  public int current = 0;
+		  /* not use comment by ton
 		  public String time="";
 		  public String path = "";
-		 
+		  */
 		  public Data() { 
 		 
 		  }
@@ -1055,6 +1058,9 @@ public class result extends Activity{
 		}
 		public CharSequence getSongId(){
 			return songid;
+		}
+		public int getCurrent(){
+			return current;
 		}
 	}
     //

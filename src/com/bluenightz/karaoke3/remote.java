@@ -265,12 +265,13 @@ public class remote extends Activity{
 			if(data.size() > 0){  
 				
 				cmd("play",String.valueOf(0));
+				
+				/* comment by ton
 				String _timestr = data.get(0).time;
 				int _timeint = Integer.valueOf(_timestr)/1000-1500;
-
 				karaokeTimeManage.clear();
 				karaokeTimeManage.buildTime(_timeint, _timeint, true);
-				
+				*/
 				String currentid = data.get(0).id;
 				final String deleteid = playlist.currentID;
 				
@@ -360,6 +361,7 @@ public class remote extends Activity{
 					String v2 = data.get(v1).id;
 			    	playlist.currentID = v2;
 			    	playlist._index = v1;
+			    	
 			    	try{
 			    		final InputStream is5 = new URL(cmdurl).openStream();
 			    	}catch(Exception e){
@@ -569,10 +571,12 @@ public class remote extends Activity{
 //										}
 									}
 									
+									/* comment by ton
 									String _timestr = tempforplayagain.time;
 									int _timeint = Integer.valueOf(_timestr)/1000 - 1500;
 									karaokeTimeManage.clear();
 									karaokeTimeManage.buildTime(_timeint, _timeint, true);
+									*/
 									
 									String currentid = tempforplayagain.id;
 									final String deleteid = playlist.currentID;
@@ -643,10 +647,12 @@ public class remote extends Activity{
 											    		playlist.currentID = data.get(playlist._index).id;
 											    		Log.d("remote.java playlist.currentID = ",playlist.currentID);
 											    		song nextsong = data.get(playlist._index);
+											    		/* comment by ton
 											    		String _timestr = String.valueOf(nextsong.time);
 														int _timeint = Integer.valueOf(_timestr)/1000-1900;
 														karaokeTimeManage.clear();
 														karaokeTimeManage.buildTime(_timeint, _timeint, true);
+														*/
 										    	}catch(Exception e){
 										     	}
 											  }
@@ -783,6 +789,7 @@ public class remote extends Activity{
     	if(method == "play"){
     		cmdurl = urlcommand+"MODE=pl_play&id="+data.get(Integer.valueOf(url)).id; 
     		playlist._index = Integer.valueOf(url);
+    		
     	}
     	if(method == "play2"){
     		cmdurl = urlcommand+"MODE=pl_play";
@@ -1080,10 +1087,6 @@ public class remote extends Activity{
 				Log.e("##show all string id",_data.id);
 			}else if(_inName){
 				_data.name = chars.toString();
-			}else if(_inUrl){
-				_data.path = chars.toString();
-			}else if(_inTime){
-				_data.time = chars.toString();
 			}
  
 		  } 
@@ -1096,10 +1099,11 @@ public class remote extends Activity{
 		  // I know this could be an int, but this is just to show you how it works 
 		  
 		  public String id="";
-		  public String current="";
-		  public String time="";
-		  public String path="";
+		  public int current= 0;
 		  public String name = "";
+		  //public String time="";
+		  //public String path="";
+		  
 		 
 		  public song() { 
 		 
@@ -1199,10 +1203,10 @@ public class remote extends Activity{
 	}
 	playlist._index = indexafterswap;
 	playlist.insertnewplaylist(d);
-   	//playlist.insertnewplaylist(data);
+    playlist.insertnewplaylist(data);
    	
-   	updateVlc();
-   	   
+   	//updateVlc(); //comment by ton
+   	Log.d("remote.java","###########update VLC###########");   
    }
     
 }
