@@ -90,7 +90,6 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import com.aig.karaoke.playlist;
-//import com.
 
 public class result extends Activity{
     /** Called when the activity is first created. */
@@ -169,7 +168,7 @@ public class result extends Activity{
         serverpath = "http://"+ip+webPath;
         urlcommand = serverpath+"playlist.php?";
     	urlplaylist =serverpath+"playlist.php?MODE=playlist";
-    	newplaylist = serverpath+"control.php?MODE=playlist";
+    	newplaylist = serverpath+"playlist.php?MODE=playlist";
     	
     	
     	
@@ -241,10 +240,7 @@ public class result extends Activity{
 					
 					int m = l.getCount();
 					data.remove(m-1);
-					
 					_urlSearch = serverpath+"webservice.php?type=search&mode="+modestr+"&name="+searchstr+"&page="+page+"&clrcache="+Math.random();
-					
-					
 					datamore = _parseXml(_urlSearch);
 					
 					data.addAll(datamore);
@@ -319,43 +315,6 @@ public class result extends Activity{
 									break;
 							
 							}
-							/* comment by ton
-							if(s.equals("Add to Queue")){
-								Log.d("result.java ","Add to Queue");
-								final String file = urlencode(_songurlobject.url);
-								Log.d("result.java file = ",file);
-								cmd("add",file);
-								List = _parseXml(newplaylist);
-								Data ss = List.get(List.size()-1);
-								song _s = new playlist().new song();
-								_s.id = ss.id;
-								_s.path = ss.path;
-								_s.time = Integer.valueOf(ss.time);
-								playlist.addsong(_s);
-								
-							}else if(s.equals("Play")){
-								Log.d("result.java ","Play");
-								final String file = urlencode(_songurlobject.url);
-									//if(playlist.gettotal() == 0){
-										cmd("play",file);
-										List = _parseXml(newplaylist);
-										Data ss = List.get(List.size()-1);
-										song _s = new playlist().new song();
-										_s.id = ss.id;
-										_s.path = ss.path;   
-										_s.time = Integer.valueOf(ss.time);
-										playlist.addsong(_s);
-										playlist._index = 0;
-										playlist.currentID = ss.id;
-										String _timestr = ss.time;
-										int _timeint = Integer.valueOf(_timestr)/1000-1500;
-										Log.e("###show time ####",String.valueOf(_timeint));
-										
-							}else if(s.equals("Cancel")){
-								Log.d("result.java ","cancle");
-								
-							}
-							*/
 							
 							
 						}
@@ -473,7 +432,8 @@ public class result extends Activity{
     	}else if(method == "delete"){
     	
     		cmdurl = urlcommand+"MODE=pl_delete&id="+url;
-
+    		Log.d("result.java delete cdmurl = ",cmdurl);
+    		
     	    Log.e("txt",cmdurl);
     		HttpClient httpclient = new DefaultHttpClient();
     	    HttpPost httppost = new HttpPost(cmdurl);
@@ -504,8 +464,7 @@ public class result extends Activity{
     	}else if(method == "add"){
     		
     		cmdurl = urlcommand+"MODE=in_enqueue&id="+url;
-
-    	    Log.e("txt",cmdurl);
+    		Log.d("result.java add cdmurl = ",cmdurl);
     		HttpClient httpclient = new DefaultHttpClient();
     	    HttpPost httppost = new HttpPost(cmdurl);
     	    try {
@@ -534,8 +493,8 @@ public class result extends Activity{
     	    }
     	}else if(method == "trick"){
     		cmdurl = urlcommand+"MODE=pl_play";
-
-    	    Log.e("txt",cmdurl);
+    		Log.d("result.java trick cdmurl = ",cmdurl);
+    	    
     		HttpClient httpclient = new DefaultHttpClient();
     	    HttpPost httppost = new HttpPost(cmdurl);
     	    try {
@@ -564,8 +523,9 @@ public class result extends Activity{
     	    }
     	}else if(method == "stop"){
     		cmdurl = urlcommand+"MODE=pl_stop";
-
-    	    Log.e("txt",cmdurl);
+    		Log.d("result.java stop cdmurl = ",cmdurl);
+    		
+    	    
     		HttpClient httpclient = new DefaultHttpClient();
     	    HttpPost httppost = new HttpPost(cmdurl);
     	    try {
@@ -612,8 +572,10 @@ public class result extends Activity{
     	String _url = null;
     	if(mode=="song"){
 	    		_url = serverpath+"webservice.php?type=search&mode="+modestr+"&name="+searchstr+"&page="+page+"&clrcache="+Math.random();
+	    		Log.d("_url",_url);
     	}else if(mode=="all"){
 	    		_url = serverpath+"webservice.php?type=search&mode=all&page="+page+"&clrcache="+Math.random();
+	    		Log.d("_url",_url);
     	}
     	return _url;
     }
@@ -623,17 +585,18 @@ public class result extends Activity{
 		  List<Data> data = null; 
 		  URL url ;
 		  // sax stuff 
-		  try { 
+		  try {
+			Log.d("result.java","Create _parseXML");
 			url = new URL(u);
 		    SAXParserFactory spf = SAXParserFactory.newInstance(); 
 		    SAXParser sp = spf.newSAXParser(); 
-		 
 		    XMLReader xr = sp.getXMLReader(); 
-		 
 		    DataHandler dataHandler = new DataHandler(); 
 		    xr.setContentHandler(dataHandler); 
 		    xr.parse(new InputSource(url.openStream()));
 		    data = dataHandler.getData();
+		    String checkData = data.toString();
+		    Log.d("result.java checkData = ",checkData);
 		 
 		  } catch(ParserConfigurationException pce) { 
 		    Log.e("SAX XML", "sax parse error", pce); 
@@ -907,21 +870,7 @@ public class result extends Activity{
 		   * @throws SAXException 
 		   */ 
 		  
-		  /*
-		  <songlist>
-			  <onesong id="17">
-				  <id>17</id>
-				  <name>
-				  	<![CDATA[ 2JUTA ]]>
-				  </name>
-				  <url>
-				  <![CDATA[ /hddExt/KARAOKESONG/MALAY_SONG/083812.DAT ]]>
-				  </url>
-				  <duration>352208978</duration>
-				  <playtime>352000000</playtime>
-			  </onesong>
-		  </songlist>
-		  */
+		  
 		  
 		  
 		  @Override
@@ -930,11 +879,13 @@ public class result extends Activity{
 			if(localName.equals("onesong")){
 			  _data = new Data();
 		      String s = atts.getValue("id");
-		      Log.d("result.java s = ",s);
+		      
 		      _data.songid = s;
 		      _data.songurl = atts.getValue("songurl1");
 		      _data.songurl1 = atts.getValue("songurl1");
 		      _data.songurl2 = atts.getValue("songurl2");
+		      Log.d("result.java s = ",s);
+		      Log.d("result.java songurl = ",_data.songurl);
 		      
 		      String _picurl = atts.getValue("picurl");
 		      _data.picurl = _picurl;

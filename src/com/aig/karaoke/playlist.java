@@ -39,6 +39,7 @@ public class playlist {
 	public static void insertnewplaylist(List<com.bluenightz.karaoke3.remote.song> p){
 		Log.d("playlist.java","insertnewplaylist");
 		ArrayList<song> _p = new ArrayList<song>();
+		if(_p != null){Log.d("playlist.java","_n not null");}
 		for(int a = 0 ; a < p.size() ; ++a){
 			playlist ppp = new playlist();
 			song __s = ppp.new song();
@@ -55,6 +56,7 @@ public class playlist {
 			Log.d("playlist.java pl =","null");
 		}
 	}
+	
 	
 	public static boolean isplaylistnull(){
 		Log.d("playlist.java","isplaylistnull");
@@ -80,7 +82,6 @@ public class playlist {
 	}
 	
 	public static void setindex(int i){
-		Log.d("playlist.java","setindex");
 		_index = i;
 		Log.d("playlist.java","setindex");
 		Log.d("playlist.java _index = ",Integer.toString(_index));
@@ -158,6 +159,7 @@ public class playlist {
 		}
 		
 	}
+	
 	 
 	public static int gettotal(){
 		Log.d("playlist.java","gettotal");
@@ -180,14 +182,14 @@ public class playlist {
 			Log.d("playlist.java getid()",id);
 			return id;
 		}
-		/*
+		
 		public  long gettime(){
 			return time;
 		}
 		public  String getpath(){
 			return path;
 		}
-		*/
+		
 	}
 	
   

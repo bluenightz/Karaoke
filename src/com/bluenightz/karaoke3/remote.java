@@ -82,7 +82,7 @@ public class remote extends Activity{
 	private String host;
 	//private String pathtovideo = "%2Fvar%2Fwww%2Fhtml%2Fsong%2F";
 	//private String pathtovideo = "%2FhddExt%2FKARAOKESONG%2F";
-	private String pathtovideo = "%2Fvar%2Fwww%2Fhtml%2FtoExternal%2FKARAOKESONG%2F";
+	//private String pathtovideo = "%2Fvar%2Fwww%2Fhtml%2FtoExternal%2FKARAOKESONG%2F";
 	//private String pathtovideo ="file%3A%2F%2F%2FC%3A%2Fxampp%2Fhtdocs%2Fkaraoke%2Fsong%2F";
 	//private String pathtovideo = "file%3A%2F%2F%2FC%3A%2Fxampp%2Fhtdocs%2Fkaraoke%2Fsong%2F";
 	//private String pathtovideo = "file%3A%2F%2F%2FC%3A%2Fsong%2F"; //window c:
@@ -103,8 +103,6 @@ public class remote extends Activity{
  	private SharedPreferences s;
  	private song tempsong1 = null;
  	private song tempsong2 = null;
- 	//private int tempsong1 = 99999;
- 	//private int tempsong2 = 99999;
  	private String tFirst = null;
  	private String idcurrent;
  	private TextView prevtext = null;
@@ -165,12 +163,6 @@ public class remote extends Activity{
     	urlcommand = serverpath+"playlist.php?";
     	urlplaylist = serverpath+"playlist.php?MODE=playlist";
         newplaylist = serverpath+"playlist.php?MODE=playlist";
-        
-        
-        
-        Log.d("remote.java serverpath = ",serverpath);
-        Log.d("remote.java urlstatus = ",urlstatus);
-        Log.d("remote.java urlcommand = ",urlcommand);
         
         if(mutestat==null){
         	mutestat=false;
@@ -268,7 +260,6 @@ public class remote extends Activity{
         ImageView stopbtn = (ImageView) findViewById(R.id.rstop);
         stopV = stopbtn;
         stopbtn.setOnClickListener(new View.OnClickListener() {
-			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 			if(data.size() > 0){  
@@ -302,8 +293,6 @@ public class remote extends Activity{
 			}
 			}
 		});
-        
-
         
         ImageView playbtn = (ImageView) findViewById(R.id.rplay);
         playV = playbtn;
@@ -457,12 +446,11 @@ public class remote extends Activity{
 		
         
           //final ListView l = (ListView) findViewById(R.id.listView1);
-         
-          data = _parseXml(urlplaylist+'&'+Math.random());
-          //data = _parseXml(newplaylist);
-          
+          data = _parseXml(urlplaylist+"&"+Math.random());
+          data = _parseXml(newplaylist);
+          String checkData = data.toString();
+          Log.d("remote.java dcheckData = ",checkData);
           Log.d("remote.java data.size() = ",Integer.toString(data.size()));
-          
           Log.d("remote.java","setup New PLaytlist Data");
           int firstremove = 0;
           Log.d("remote.java firstremove = ","Initial Value for firstremove");
@@ -476,6 +464,8 @@ public class remote extends Activity{
 	          }
 	      Log.d("remote.java firstremove = ","Exit from Loop"); 
           
+	      
+	      
 	      // comment by ton disable for error after start activity
 	      //tempforplayagain = data.get(firstremove);
 	      //Log.d("remote.java tempforplayagain = ","Set Data for tempforplayagain");
@@ -485,6 +475,8 @@ public class remote extends Activity{
           //Log.d("remote.java"," playlist.updateplaylist");
           // end comment by ton
           
+	      
+	      
           final DragNDropListView l = (DragNDropListView) findViewById(R.id.listView1); //comment by ton
 	  		items = new ArrayList<Map<String, Object>>();
 	  		for(int i = 0; i < data.size(); ++i) {
@@ -699,6 +691,7 @@ public class remote extends Activity{
     
 
     public void showmv(){
+    	Log.d("remote.java","showmv");
     	karaokeTimeManage.clear();
     	playlist.mvmode = true;
     	int total = playlist.total;
@@ -779,14 +772,14 @@ public class remote extends Activity{
     	
     	if(method == "add"){
     		//cmdurl = urlcommand+"command=in_play&input="+pathtovideo+url;
-    		cmdurl = urlcommand+"MODE=in_enqueue&id="+pathtovideo+url;
+    		cmdurl = urlcommand+"MODE=in_enqueue&id="+url;
     		
     	}
     	if(method == "addnopath"){
     		cmdurl = urlcommand+"MODE=in_enqueue&id="+url;
     	}
     	if(method == "revsort"){
-    		cmdurl = urlcommand+"MODE=in_enqueue&id="+pathtovideo+url;
+    		cmdurl = urlcommand+"MODE=in_enqueue&id="+url;
     	}
     	if(method == "play"){
     		cmdurl = urlcommand+"MODE=pl_play&id="+data.get(Integer.valueOf(url)).id; 
@@ -814,21 +807,16 @@ public class remote extends Activity{
     	 Log.d("remote.java","create playlist data");
 		  //List<song> data = null; //comment by ton
 		  URL url ;
-		  // sax stuff 
-		  try { 
+		  try {
 			url = new URL(u);
 		    SAXParserFactory spf = SAXParserFactory.newInstance(); 
 		    SAXParser sp = spf.newSAXParser(); 
-		 
 		    XMLReader xr = sp.getXMLReader(); 
-		 
 		    DataHandler dataHandler = new DataHandler(); 
 		    xr.setContentHandler(dataHandler); 
-		    //InputStream ins = getResources().openRawResource(R.raw.data);
-		    //xr.parse(new InputSource(ins)); 
 		    xr.parse(new InputSource(url.openStream()));
-		     
 		    data = dataHandler.getData();
+		    
 		    
 		  } catch(ParserConfigurationException pce) { 
 		    Log.e("SAX XML", "sax parse error", pce); 
@@ -837,7 +825,9 @@ public class remote extends Activity{
 		  } catch(IOException ioe) { 
 		    Log.e("SAX XML", "sax parse io error", ioe); 
 		  } 
-		 
+		  
+		  String checkData = data.toString();
+		  Log.d("remote.java checkData = ",checkData);
 		  return data; 
 	} 
 	
@@ -1022,10 +1012,15 @@ public class remote extends Activity{
 		  @Override
 		  public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException { 
 			  
-			
+			Log.d("remote.java","startElement");
 			if(localName.equals("onesong")){
 				_data = new song();
+				String s = atts.getValue("id");
+				
+				_data.id = s;
+				Log.d("remote.java onesong  _data.id = ",_data.id);
 			    Datas.add(_data);
+			    
 				//_insong = true;
 			}else if(localName.equals("id")){
 				Log.e("#### We're in ID node","Yes, we are.");
@@ -1101,7 +1096,6 @@ public class remote extends Activity{
 	
 	public class song { 
 		  // I know this could be an int, but this is just to show you how it works 
-		  
 		  public String id="";
 		  public String current="";
 		  public String time="";
@@ -1112,7 +1106,7 @@ public class remote extends Activity{
 		 
 		  }
 	}
-    
+   
 
     
     private void runcmd(String t){
@@ -1194,7 +1188,7 @@ public class remote extends Activity{
     }
     
    private void sendnewplaylist(){
-   	
+   	Log.d("remote.java","sendnewplaylist");
 	playlist.isswap = true;
 	List<song> d = data;
 	int indexafterswap = 0;
