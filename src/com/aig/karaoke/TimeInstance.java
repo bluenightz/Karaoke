@@ -48,7 +48,7 @@ public class TimeInstance extends CountDownTimerWithPause{
 		try{
 			 nextsong = _p.get(playlist._index+1);
 			 nextid = nextsong.id;
-			_timestr = String.valueOf(nextsong.time);
+			//_timestr = String.valueOf(nextsong.time); //comment by ton
 			_timeint = Integer.valueOf(_timestr)/1000-1500;
 			karaokeTimeManage.clear();
 			karaokeTimeManage.buildTime(_timeint, _timeint, true);
@@ -60,7 +60,7 @@ public class TimeInstance extends CountDownTimerWithPause{
 			try{
 				 nextsong = _p.get(0);
 				 nextid = nextsong.id;
-				_timestr = String.valueOf(nextsong.time);
+				//_timestr = String.valueOf(nextsong.time); //comment by ton
 				_timeint = Integer.valueOf(_timestr)/1000-1500;
 				karaokeTimeManage.clear();
 				karaokeTimeManage.buildTime(_timeint, _timeint, true);

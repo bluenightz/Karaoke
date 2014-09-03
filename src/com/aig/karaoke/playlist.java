@@ -171,8 +171,8 @@ public class playlist {
 	public class song{
 		public  String name;
 		public  String id;
-		public  long time;
-		public  String path;
+		//public  long time;
+		//public  String path;
 		public  Boolean current;
 		
 		public  String getname(){
@@ -182,13 +182,20 @@ public class playlist {
 			Log.d("playlist.java getid()",id);
 			return id;
 		}
+		public  Boolean getCurrent(){
+			Log.d("playlist.java getCurrent()",Boolean.toString(current));
+			return current;
+		}
 		
+		
+		/*
 		public  long gettime(){
 			return time;
 		}
 		public  String getpath(){
 			return path;
 		}
+		*/
 		
 	}
 	

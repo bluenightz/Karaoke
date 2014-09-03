@@ -90,6 +90,7 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import com.aig.karaoke.playlist;
+//import com.
 
 public class result extends Activity{
     /** Called when the activity is first created. */
@@ -150,7 +151,12 @@ public class result extends Activity{
 	        }
         }
         
-  
+
+        
+       
+        
+        
+        
         
         s = PreferenceManager.getDefaultSharedPreferences(this);
         
@@ -164,6 +170,7 @@ public class result extends Activity{
 //    	newplaylist = serverpath+"control.php";
         
         ip = s.getString("ip", null);
+        //ip = host+":8080";
         webPath = "/karaoke/";
         serverpath = "http://"+ip+webPath;
         urlcommand = serverpath+"playlist.php?";
@@ -184,12 +191,12 @@ public class result extends Activity{
         remote = (ImageView) findViewById(R.id.remote);
         remote.setOnClickListener(new View.OnClickListener() {
 		
+
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
 				//if(playlist.gettotal()!=0){
 				int total = playlist.pl.size();
-				Log.d("result.java total = ",Integer.toString(total));
 				//if(total != 0){
 				if(true){
 					Intent i = new Intent(result.this, remote.class);
@@ -208,6 +215,9 @@ public class result extends Activity{
 		});
         
         
+        
+        
+        
         Log.e("txt",_urlSearch);
         final ListView l = (ListView) findViewById(R.id.listView1);
         
@@ -219,13 +229,15 @@ public class result extends Activity{
         more.title = "No more result...";
         if(data.size()==20){
         	data.add(more);
-        } 
+        }  
+          
         
         _a = new AlbumListAdapter(result.this, R.layout.row_pic_layout, data);
         l.setAdapter(_a);
         
         l.setOnItemClickListener(new OnItemClickListener(){
-        	
+
+		
 			public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
@@ -235,23 +247,30 @@ public class result extends Activity{
 				AlertDialog.Builder alertB = new AlertDialog.Builder(result.this);
 				alertB.setTitle("Choose Action");
 				
+				
 				if(arg2 == l.getCount()-1 && l.getCount() > 20 ){
 					++page;
-					
+					 
 					int m = l.getCount();
 					data.remove(m-1);
+					
 					_urlSearch = serverpath+"webservice.php?type=search&mode="+modestr+"&name="+searchstr+"&page="+page+"&clrcache="+Math.random();
+					
+					
 					datamore = _parseXml(_urlSearch);
 					
 					data.addAll(datamore);
 					
+						
 					Data more = new Data();
 			        more.title = "No more result...";
 			        data.add(more);
-			        
+						
+						
 					_a.notifyDataSetChanged();
 					
 					l.smoothScrollToPosition(m);
+					
 					
 					_a.notifyDataSetChanged();
 				}else{
@@ -266,16 +285,15 @@ public class result extends Activity{
 						
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
-							List<Data> List = _parseXml(newplaylist); 
-							//String s = (List.size()==0)?"Play":(String) c[which]; //comment by ton
-							Log.d("result.java s = ",s.toString());
-							Log.d("result.java playlist.mvmode =", Boolean.toString(playlist.mvmode));
+
 							
+							List<Data> List = _parseXml(newplaylist); 
+							//String s = (List.size()==0)?"Play":(String) c[which];
+
 							if(playlist.mvmode == true){
 								cmd("empty","");
-								playlist.mvmode=false;
-								Log.d("result.java playlist.mvmode =", Boolean.toString(playlist.mvmode));
-							}
+								playlist.mvmode=false;  
+							} 
 							switch(which){
 							case 0: {
 									Log.d("result.java ","Add to Queue");
@@ -286,8 +304,8 @@ public class result extends Activity{
 									Data ss = List.get(List.size()-1);
 									song _s = new playlist().new song();
 									_s.id = ss.id;
-									_s.path = ss.path;
-									_s.time = Integer.valueOf(ss.time);
+									//_s.path = ss.path; //comment by ton
+									//_s.time = Integer.valueOf(ss.time); //comment by ton
 									playlist.addsong(_s);
 							}
 									break;
@@ -298,8 +316,8 @@ public class result extends Activity{
 									Data ss = List.get(List.size()-1);
 									song _s = new playlist().new song();
 									_s.id = ss.id;
-									_s.path = ss.path;   
-									_s.time = Integer.valueOf(ss.time);
+									//_s.path = ss.path; //comment by ton
+									//_s.time = Integer.valueOf(ss.time); //comment by ton
 									playlist.addsong(_s);
 									playlist._index = 0;
 									playlist.currentID = ss.id;
@@ -320,8 +338,8 @@ public class result extends Activity{
 						}
 					});
 					AlertDialog alert = alertB.create();
-					
 					alert.show();
+					
 					
 					}else{
 						alertB.setTitle("Alert Message");
@@ -432,8 +450,7 @@ public class result extends Activity{
     	}else if(method == "delete"){
     	
     		cmdurl = urlcommand+"MODE=pl_delete&id="+url;
-    		Log.d("result.java delete cdmurl = ",cmdurl);
-    		
+
     	    Log.e("txt",cmdurl);
     		HttpClient httpclient = new DefaultHttpClient();
     	    HttpPost httppost = new HttpPost(cmdurl);
@@ -464,7 +481,8 @@ public class result extends Activity{
     	}else if(method == "add"){
     		
     		cmdurl = urlcommand+"MODE=in_enqueue&id="+url;
-    		Log.d("result.java add cdmurl = ",cmdurl);
+
+    	    Log.e("txt",cmdurl);
     		HttpClient httpclient = new DefaultHttpClient();
     	    HttpPost httppost = new HttpPost(cmdurl);
     	    try {
@@ -493,8 +511,8 @@ public class result extends Activity{
     	    }
     	}else if(method == "trick"){
     		cmdurl = urlcommand+"MODE=pl_play";
-    		Log.d("result.java trick cdmurl = ",cmdurl);
-    	    
+
+    	    Log.e("txt",cmdurl);
     		HttpClient httpclient = new DefaultHttpClient();
     	    HttpPost httppost = new HttpPost(cmdurl);
     	    try {
@@ -523,9 +541,8 @@ public class result extends Activity{
     	    }
     	}else if(method == "stop"){
     		cmdurl = urlcommand+"MODE=pl_stop";
-    		Log.d("result.java stop cdmurl = ",cmdurl);
-    		
-    	    
+
+    	    Log.e("txt",cmdurl);
     		HttpClient httpclient = new DefaultHttpClient();
     	    HttpPost httppost = new HttpPost(cmdurl);
     	    try {
@@ -572,31 +589,32 @@ public class result extends Activity{
     	String _url = null;
     	if(mode=="song"){
 	    		_url = serverpath+"webservice.php?type=search&mode="+modestr+"&name="+searchstr+"&page="+page+"&clrcache="+Math.random();
-	    		Log.d("_url",_url);
     	}else if(mode=="all"){
 	    		_url = serverpath+"webservice.php?type=search&mode=all&page="+page+"&clrcache="+Math.random();
-	    		Log.d("_url",_url);
     	}
     	return _url;
     }
     //
-    
     public List<Data> _parseXml(String u) { 
 		  List<Data> data = null; 
 		  URL url ;
 		  // sax stuff 
-		  try {
-			Log.d("result.java","Create _parseXML");
+		  try { 
 			url = new URL(u);
 		    SAXParserFactory spf = SAXParserFactory.newInstance(); 
 		    SAXParser sp = spf.newSAXParser(); 
+		 
 		    XMLReader xr = sp.getXMLReader(); 
+		 
 		    DataHandler dataHandler = new DataHandler(); 
 		    xr.setContentHandler(dataHandler); 
+		    //InputStream ins = getResources().openRawResource(R.raw.data);
+		    //xr.parse(new InputSource(ins)); 
 		    xr.parse(new InputSource(url.openStream()));
+		     
 		    data = dataHandler.getData();
-		    String checkData = data.toString();
-		    Log.d("result.java checkData = ",checkData);
+		    
+		    
 		 
 		  } catch(ParserConfigurationException pce) { 
 		    Log.e("SAX XML", "sax parse error", pce); 
@@ -647,7 +665,7 @@ public class result extends Activity{
 					data.remove(m-1);
 					
 					_urlSearch = serverpath+"webservice.php?type=search&mode="+modestr+"&name="+searchstr+"&page="+page+"&clrcache="+Math.random();
-					Log.d("result.java _urlSearch = ",_urlSearch);
+					
 					
 					datamore = _parseXml(_urlSearch);
 					
@@ -870,7 +888,21 @@ public class result extends Activity{
 		   * @throws SAXException 
 		   */ 
 		  
-		  
+		  /*
+		  <songlist>
+			  <onesong id="17">
+				  <id>17</id>
+				  <name>
+				  	<![CDATA[ 2JUTA ]]>
+				  </name>
+				  <url>
+				  <![CDATA[ /hddExt/KARAOKESONG/MALAY_SONG/083812.DAT ]]>
+				  </url>
+				  <duration>352208978</duration>
+				  <playtime>352000000</playtime>
+			  </onesong>
+		  </songlist>
+		  */
 		  
 		  
 		  @Override
@@ -879,13 +911,11 @@ public class result extends Activity{
 			if(localName.equals("onesong")){
 			  _data = new Data();
 		      String s = atts.getValue("id");
-		      
+		      Log.d("result.java s = ",s);
 		      _data.songid = s;
 		      _data.songurl = atts.getValue("songurl1");
 		      _data.songurl1 = atts.getValue("songurl1");
 		      _data.songurl2 = atts.getValue("songurl2");
-		      Log.d("result.java s = ",s);
-		      Log.d("result.java songurl = ",_data.songurl);
 		      
 		      String _picurl = atts.getValue("picurl");
 		      _data.picurl = _picurl;
@@ -978,7 +1008,6 @@ public class result extends Activity{
 		    } else if(_inUrl){
 		    	_data.path = chars.toString();
 		    } else if(_inDuration){
-		    	
 		    } else if(_inPlaytime){
 		      _data.time = chars.toString();
 		      Log.e("We're in playtime Node","Yes, We are.");

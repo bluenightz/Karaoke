@@ -446,8 +446,8 @@ public class remote extends Activity{
 		
         
           //final ListView l = (ListView) findViewById(R.id.listView1);
-          data = _parseXml(urlplaylist+"&"+Math.random());
-          data = _parseXml(newplaylist);
+          data = _parseXml(urlplaylist+"&clrcache="+Math.random());
+          //data = _parseXml(newplaylist);
           String checkData = data.toString();
           Log.d("remote.java dcheckData = ",checkData);
           Log.d("remote.java data.size() = ",Integer.toString(data.size()));
@@ -691,7 +691,6 @@ public class remote extends Activity{
     
 
     public void showmv(){
-    	Log.d("remote.java","showmv");
     	karaokeTimeManage.clear();
     	playlist.mvmode = true;
     	int total = playlist.total;
@@ -816,7 +815,6 @@ public class remote extends Activity{
 		    xr.setContentHandler(dataHandler); 
 		    xr.parse(new InputSource(url.openStream()));
 		    data = dataHandler.getData();
-		    
 		    
 		  } catch(ParserConfigurationException pce) { 
 		    Log.e("SAX XML", "sax parse error", pce); 
@@ -959,7 +957,7 @@ public class remote extends Activity{
 	        }
 	 }
 	 
-	 
+	
 	public class DataHandler extends DefaultHandler { 
 		 
 		  // booleans that check whether it's in a specific tag or not 
@@ -1012,7 +1010,7 @@ public class remote extends Activity{
 		  @Override
 		  public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException { 
 			  
-			Log.d("remote.java","startElement");
+			
 			if(localName.equals("onesong")){
 				_data = new song();
 				String s = atts.getValue("id");
@@ -1096,6 +1094,7 @@ public class remote extends Activity{
 	
 	public class song { 
 		  // I know this could be an int, but this is just to show you how it works 
+		  
 		  public String id="";
 		  public String current="";
 		  public String time="";
@@ -1106,7 +1105,7 @@ public class remote extends Activity{
 		 
 		  }
 	}
-   
+    
 
     
     private void runcmd(String t){
@@ -1188,7 +1187,7 @@ public class remote extends Activity{
     }
     
    private void sendnewplaylist(){
-   	Log.d("remote.java","sendnewplaylist");
+   	
 	playlist.isswap = true;
 	List<song> d = data;
 	int indexafterswap = 0;
