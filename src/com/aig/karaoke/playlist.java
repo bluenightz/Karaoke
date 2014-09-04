@@ -46,8 +46,6 @@ public class playlist {
 			__s.id = p.get(a).id;
 			Log.d("playlist.java __s.id = ",__s.id);
 			__s.name = p.get(a).name;
-			//__s.time = Integer.valueOf(p.get(a).time); //comment by ton
-			//__s.path = p.get(a).path; //comment by ton
 			_p.add(__s);
 		}
 		Log.d("playlist.java","pl");
@@ -84,7 +82,6 @@ public class playlist {
 	public static void setindex(int i){
 		_index = i;
 		Log.d("playlist.java","setindex");
-		Log.d("playlist.java _index = ",Integer.toString(_index));
 	}
 	
 	public static void buildplaylist(){
@@ -147,15 +144,12 @@ public class playlist {
 	
 	public static void updateplaylist(List<com.bluenightz.karaoke3.remote.song> data){
 		Log.d("playlist.java","updateplaylist");
-		//List<song> List = new ArrayList<song>();
 		pl.clear(); // comment by ton
 		for(int i = 0 ; i < data.size()-1 ; ++i){
 			remote rr = new remote();
 			com.bluenightz.karaoke3.remote.song _s = rr.new song();
 			_s.id = data.get(i).id;
 			_s.name = data.get(i).name;
-			//_s.path = data.get(i).path;
-			//_s.time = data.get(i).time;
 		}
 		
 	}
@@ -171,8 +165,7 @@ public class playlist {
 	public class song{
 		public  String name;
 		public  String id;
-		//public  long time;
-		//public  String path;
+		
 		public  int current;
 		
 		public  String getname(){

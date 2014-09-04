@@ -5,11 +5,14 @@ import com.terlici.*;
 import com.terlici.dragndroplist.DragNDropListView;
 import com.terlici.dragndroplist.DragNDropSimpleAdapter;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -136,7 +139,8 @@ public class remote extends Activity{
  	
  	private ArrayList<Map<String, Object>> items;
  	private String webPath;
- 	
+ 	private int timeOut;
+ 	private String mainUrl;
  	//private String cmdurl;
  	//private int currentid;
 	
@@ -150,6 +154,8 @@ public class remote extends Activity{
         ip = s.getString("ip", null);
         
         
+        
+        
 //        ip = host+":8080";
 //        urlstatus = "http://"+ip+"/requests/status.xml";
 //    	urlcommand = "http://"+ip+"/requests/status.xml?";
@@ -159,6 +165,7 @@ public class remote extends Activity{
         
         webPath = "/karaoke/";
         serverpath = "http://"+ip+"/karaoke/";
+        mainUrl = serverpath+"playlist.php";
         urlstatus = serverpath+"playlist.php?MODE=status";
     	urlcommand = serverpath+"playlist.php?";
     	urlplaylist = serverpath+"playlist.php?MODE=playlist";
@@ -189,7 +196,7 @@ public class remote extends Activity{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				String cmdurl = urlcommand+"MODE=pl_pause";
-				Log.d("remote.java urlstatus = ",urlstatus);
+				
 				Log.d("remote.java cmdurl = ",cmdurl);
 		    	
 		    	try{
@@ -207,7 +214,7 @@ public class remote extends Activity{
 				// TODO Auto-generated method stub
 				Intent i = new Intent(remote.this, search.class); 
 				startActivity(i);
-				Log.d("remote.java urlstatus = ",urlstatus);
+				
 			}
 		});
         
@@ -215,7 +222,7 @@ public class remote extends Activity{
         mutebtn.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				Log.d("remote.java urlstatus = ",urlstatus);
+				
 				// TODO Auto-generated method stub   
 				if(mutestat==true){
 					cmd("nomute","");
@@ -232,10 +239,10 @@ public class remote extends Activity{
         replaybtn.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				Log.d("remote.java urlstatus = ",urlstatus);
+				
 				// TODO Auto-generated method stub
 		    	String cmdurl = urlcommand+"MODE=seek&val=0";
-		    	Log.d("remote.java urlstatus = ",urlstatus);
+		    	
 		    	try{
 		    		final InputStream is1 = new URL(cmdurl).openStream();
 		    	}catch(Exception e){
@@ -262,10 +269,10 @@ public class remote extends Activity{
         stopbtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				Log.d("remote.java","Stop Clicked");
 			if(data.size() > 0){  
-				
+				Log.d("remote.java","data.size() > 0");
 				cmd("play",String.valueOf(0));
-				
 				/* comment by ton
 				String _timestr = data.get(0).time;
 				int _timeint = Integer.valueOf(_timestr)/1000-1500;
@@ -291,6 +298,7 @@ public class remote extends Activity{
 				   }
 				}, 1000);
 				
+				
 			}
 			}
 		});
@@ -301,11 +309,18 @@ public class remote extends Activity{
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				 	
-					String cmdurl = urlcommand+"MODE=pl_play&id="+playlist.currentID;
-					
-					Log.d("remote.java","playbtn Clicked");
-					Log.d("remote.java cmdurl = ",cmdurl);
+				Log.d("remote.java","playbtn Clicked");
+					String currentid = data.get(0).id; // add by ton
+					playlist.currentID = currentid; // add by ton
+					if(checkServer(mainUrl) == 200){
+						Log.d("remote getCurrent ID","");
+						String cmdurl = urlcommand+"MODE=pl_play&id="+playlist.currentID;
+						try{
+				    		final InputStream is1 = new URL(cmdurl).openStream();
+				    	}catch(Exception e){
+				    		
+				    	}
+					}
 					//String _timestr = tempforplayagain.time; comment by ton
 					//int _timeint = Integer.valueOf(_timestr)/1000-1500; comment by ton
 					//Log.e("###show time ####",String.valueOf(_timeint));
@@ -313,11 +328,7 @@ public class remote extends Activity{
 					//karaokeTimeManage.buildTime(_timeint, _timeint, true);
 					
 		    	
-		    	try{
-		    		final InputStream is1 = new URL(cmdurl).openStream();
-		    	}catch(Exception e){
-		    		
-		    	}
+		    	
 		    	
 	    		
 			}   
@@ -486,9 +497,6 @@ public class remote extends Activity{
 	  			item.put("name", data.get(i).name );
 	  			item.put("_id", data.get(i).id );
 	  			item.put("_current", data.get(i).current );
-	  			//item.put("path", data.get(i).path );
-	  			//item.put("time", data.get(i).time );
-	
 	  			items.add(item);
 	  		}  
 	  		  
@@ -539,8 +547,6 @@ public class remote extends Activity{
 				selectedIndex = arg2;
 				      
     
-				  
-				
 						final CharSequence[] c = {"Play","Delete","Cancel"}; 
 						//final CharSequence[] c = {"Play","Delete","Cancel"}; 
 						AlertDialog.Builder alertB = new AlertDialog.Builder(remote.this);
@@ -1207,6 +1213,46 @@ public class remote extends Activity{
    	
    	//updateVlc(); //comment by ton
    	Log.d("remote.java","###########update VLC###########");   
+   }
+   
+   // checkserver Status 
+   public int checkServer(String getUrl){
+	   int promt = 0;
+	   try{
+		   URL url = new URL(getUrl);
+		   HttpURLConnection urlcon = (HttpURLConnection) url.openConnection();
+		   urlcon.connect();
+		   InputStream in = new BufferedInputStream(urlcon.getInputStream());
+		   promt = urlcon.getResponseCode() ;
+		   /*
+		   //Log.d("(urlcon.getResponseCode()",Integer.toString(urlcon.getResponseCode()));
+		     if (!url.getHost().equals(urlcon.getURL().getHost())) {
+		    	 // we were redirected! Kick the user out to the browser to sign on?
+		    	 //Log.d("(urlcon.getResponseCode()",Integer.toString(urlcon.getResponseCode()));
+		    	 promt = urlcon.getResponseCode() ;
+		   } else {
+			   urlcon.disconnect();
+			   promt = urlcon.getResponseCode() ;
+		   }
+		   */
+		   
+		   /*
+		   Log.d("(urlcon.getResponseCode()",Integer.toString(urlcon.getResponseCode()));
+		   if (urlcon.getResponseCode() == 200) {
+	            promt = true;
+		    }else{
+		      promt = false;
+		    }
+		    */
+
+	   }catch (MalformedURLException e1) {
+		   
+		   e1.printStackTrace();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+	   return promt;
    }
     
 }
