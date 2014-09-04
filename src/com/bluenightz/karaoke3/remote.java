@@ -102,7 +102,7 @@ public class remote extends Activity{
  	private ImageView mutebtn;
  	private SeekBar volbar1;
  	private String selectedID;
- 	private int selectedIndex;
+ 	private int selectedIndex = 0;
  	private SharedPreferences s;
  	private song tempsong1 = null;
  	private song tempsong2 = null;
@@ -532,18 +532,14 @@ public class remote extends Activity{
 	  		});
 
           
-          
-          /* /
-          _a = new AlbumListAdapter(remote.this, R.layout.row_pic_layout, data);
-          l.setAdapter(_a); 
-          // */
           l.setOnItemClickListener(new OnItemClickListener(){
         
         	  
     		
 			public void onItemClick(final AdapterView<?> arg0, final View arg1, final int arg2,
 					long arg3) {
-				//selectedID = sID.get(arg2); 	
+				//selectedID = sID.get(arg2);
+				selectedIndex = 0;
 				selectedIndex = arg2;
 				      
     
@@ -557,134 +553,58 @@ public class remote extends Activity{
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
 								String s = (String) c[which];
-								   
 								String cmdurl = null;
-								if(s.equals("Play")){  
-									cmd("play",String.valueOf(selectedIndex));
-									
-									for(int x = 0 ; x < data.size() ; ++x){
-										if(data.get(selectedIndex).id.equals(items.get(x).get("_id"))){
-											tempforplayagain = data.get(selectedIndex);
-											data.remove(selectedIndex);
-											items.remove(x);
-											_a.notifyDataSetChanged();
-											break;
-										}
-//										if( items.get(selectedIndex).get("_id").equals(data.get(x).id )){
-//											tempforplayagain = data.get(x);
-//											data.remove(x);
-//											break;
-//										}
-									}
-									
-									/* comment by ton
-									String _timestr = tempforplayagain.time;
-									int _timeint = Integer.valueOf(_timestr)/1000 - 1500;
-									karaokeTimeManage.clear();
-									karaokeTimeManage.buildTime(_timeint, _timeint, true);
-									*/
-									
-									String currentid = tempforplayagain.id;
-									final String deleteid = playlist.currentID;
-									
-									
-
-//									String _timestr = data.get(selectedIndex).time;
-//									int _timeint = Integer.valueOf(_timestr)/1000-1500;
-//									Log.e("###show time ####",String.valueOf(_timeint));
-//									karaokeTimeManage.clear();
-//									karaokeTimeManage.buildTime(_timeint, _timeint, true);
-//									
-//									String currentid = data.get(selectedIndex).id;
-//									final String deleteid = playlist.currentID;
-//									
-//									tempforplayagain = data.get(selectedIndex);
-//									//data.remove(selectedIndex);
-//									items.remove(selectedIndex);
-//									
-//									for(int x = 0 ; x < data.size() ; ++x){
-//										if(data.get(x).id.equals()){
-//											items.remove(x);
-//											break;
-//										}
-//									}
-									
-									
-									
-									playlist._index = selectedIndex;
-									Log.d("remote.java playlist._index = ",Integer.toString(playlist._index));
-									playlist.currentID = currentid;
-									Log.d("remote.java playlist.currentID = ",playlist.currentID);
-									Handler handler = new Handler();
-									handler.postDelayed(new Runnable(){
-									@Override
-									      public void run(){
-											cmd("delete", deleteid);
-									   }
-									}, 1000);
-									
-								}else if(s.equals("Cancel")){
-									Log.d("remote.java","Cancel");
-									int testnum = arg2;
-									Log.e("testnum", String.valueOf(testnum));
-								}else if(s.equals("Delete")){
-									Log.d("remote.java","Delete");
-									if(playlist.currentID.toString().equals(String.valueOf(data.get(selectedIndex).id))){
-										final String _cmdurl = urlcommand+"MODE=pl_delete&id="+data.get(selectedIndex).id;
-										Log.d("remote.java _cmdurl = ",_cmdurl);
-										String cmdurlplay = urlcommand+"MODE=pl_next";
-										Log.d("remote.java _cmdurl = ",_cmdurl);
-										try{
-								    		final InputStream is = new URL(cmdurlplay).openStream();
-								    	}catch(Exception e){
-								    		
-								    	}
-										final Handler handler = new Handler();
-										handler.postDelayed(new Runnable() {
-										  @Override
-										  public void run() {
-										    //Do something after 100ms
-											  if(data.size() > 0){
+								switch(which){
+									case 0 : {
+												cmd("play",String.valueOf(selectedIndex));
+												for(int x = 0 ; x < data.size() ; ++x){
+													if(data.get(selectedIndex).id.equals(items.get(x).get("_id"))){
+														tempforplayagain = data.get(selectedIndex);
+														data.remove(selectedIndex);
+														items.remove(x);
+														_a.notifyDataSetChanged();
+														break;
+													}
+												}
+												String currentid = tempforplayagain.id;
+												final String deleteid = playlist.currentID;
+												playlist._index = selectedIndex;
+												Log.d("remote.java playlist._index = ",Integer.toString(playlist._index));
+												playlist.currentID = currentid;
+												Log.d("remote.java playlist.currentID = ",playlist.currentID);
+												Handler handler = new Handler();
+												handler.postDelayed(new Runnable(){
+												@Override
+												      public void run(){
+														cmd("delete", deleteid);
+												   }
+												}, 1000);
+												}break;
+									case 1 : {
+												
+												Log.d("remote.java","Delete");
+										   		cmdurl = urlcommand+"MODE=pl_delete&id="+data.get(selectedIndex).id;
+										   		Log.d("remote.java cmdurl = ",cmdurl);
+												String cmdurlplay = urlcommand+"MODE=pl_next";
+												Log.d("remote.java cmdurlplay = ",cmdurlplay);
 												data.remove(selectedIndex); 
 												items.remove(selectedIndex);
 												_a.notifyDataSetChanged();
 												try{
-											    		final InputStream is = new URL(_cmdurl).openStream();
-											    		playlist.currentID = data.get(playlist._index).id;
-											    		Log.d("remote.java playlist.currentID = ",playlist.currentID);
-											    		song nextsong = data.get(playlist._index);
-											    		/* comment by ton
-											    		String _timestr = String.valueOf(nextsong.time);
-														int _timeint = Integer.valueOf(_timestr)/1000-1900;
-														karaokeTimeManage.clear();
-														karaokeTimeManage.buildTime(_timeint, _timeint, true);
-														*/
+										    		final InputStream is = new URL(cmdurl).openStream();
 										    	}catch(Exception e){
-										     	}
-											  }
-						  				
-										  }
-										}, 400);  
+										    		
+										    	}
 										
-									}else{
+												}break;
+									case 2 : {
+												Log.d("remote.java","Cancel");
+												int testnum = arg2;
+												Log.e("testnum", String.valueOf(testnum));
 										
-								   		cmdurl = urlcommand+"MODE=pl_delete&id="+data.get(selectedIndex).id;
-								   		Log.d("remote.java cmdurl = ",cmdurl);
-										String cmdurlplay = urlcommand+"MODE=pl_next";
-										Log.d("remote.java cmdurlplay = ",cmdurlplay);
-										data.remove(selectedIndex); 
-										items.remove(selectedIndex);
-										_a.notifyDataSetChanged();
-										try{
-								    		final InputStream is = new URL(cmdurl).openStream();
-								    	}catch(Exception e){
-								    		
-								    	}
-									}
-							    	    
-								}  
+												}break;
+								}
 								
-						    	
 							}
 							
 							
@@ -696,9 +616,7 @@ public class remote extends Activity{
 			}
         }
         );
-        // */
-             
-        
+         
     }
     
 
