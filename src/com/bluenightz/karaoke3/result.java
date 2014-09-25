@@ -308,6 +308,8 @@ public class result extends Activity{
 									//_s.path = ss.path; //comment by ton
 									//_s.time = Integer.valueOf(ss.time); //comment by ton
 									playlist.addsong(_s);
+									
+									
 							}
 									break;
 							case 1: {

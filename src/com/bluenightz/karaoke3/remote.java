@@ -1200,4 +1200,22 @@ public class remote extends Activity{
 	   return promt;
    }
    
+   public static void autoPlay(){
+	  
+	   //String currentid = data.get(0).id; // add by ton
+	  // playlist.currentID = currentid; // add by ton
+		
+			Log.d("remote getCurrent ID","");
+			
+			String cmdurl = urlcommand+"MODE=pl_play";
+			try{
+	    		final InputStream is1 = new URL(cmdurl).openStream();
+	    	}catch(Exception e){
+	    		
+	    	}
+		
+		
+	   
+   }
+   
 }
