@@ -38,6 +38,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import android.annotation.SuppressLint;
 import android.app.AlertDialog.Builder;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -52,6 +54,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -63,6 +66,7 @@ import com.aig.karaoke.karaokeTimeManage;
 import com.aig.karaoke.playlist;
 import com.aig.karaoke.playlist.song;
 import com.bluenightz.karaoke3.R;
+import com.bluenightz.karaoke3.remote.HandleJSON;
 import com.fedorvlasov.lazylist.ImageLoader;
 
 
@@ -131,6 +135,7 @@ public class result extends Activity{
 	public ImageLoader imageLoader;
 	private ListView l22;
 	private String newplaylist;
+	private String statusJson;
 
 	private SharedPreferences s;
 	
@@ -176,6 +181,8 @@ public class result extends Activity{
         urlcommand = serverpath+"playlist.php?";
     	urlplaylist =serverpath+"playlist.php?MODE=playlist";
     	newplaylist = serverpath+"playlist.php?MODE=playlist";
+    	statusJson = serverpath+"playlist.php?MODE=statusjson";
+    	
     	
     	
     	
@@ -309,6 +316,14 @@ public class result extends Activity{
 									//_s.time = Integer.valueOf(ss.time); //comment by ton
 									playlist.addsong(_s);
 									
+									HandleJSON myObj;
+									myObj = new HandleJSON(statusJson);
+									myObj.fetchJSON();
+									while(myObj.parsingComplete);
+									String NowID =  myObj.getcurrentplid();
+									if(Integer.parseInt(NowID)==-1){
+										com.bluenightz.karaoke3.remote.autoPlay();
+									}
 									
 							}
 									break;
@@ -1163,6 +1178,70 @@ public class result extends Activity{
         return file.exists();
     }
     
+    
+    
+    public class HandleJSON {
+		public String currentplid = "currentplid";
+	   public String urlString = null;
+	   public volatile boolean parsingComplete = true;
+	   public HandleJSON(String url){
+		      this.urlString = url;
+	   }
+	   public String getcurrentplid(){
+	      return currentplid;
+	   }
+	   
+	   
+	   @SuppressLint("NewApi")
+	   public void readAndParseJSON(String in) {
+		   try {
+		         JSONObject reader = new JSONObject(in);
+		         currentplid = reader.getString("currentplid");
+		        
+		         parsingComplete = false;
+
+		        } catch (Exception e) {
+		           // TODO Auto-generated catch block
+		           e.printStackTrace();
+		        }
+	   }
+	   public void fetchJSON(){
+		   Thread thread = new Thread(new Runnable(){
+			  
+			   @Override
+		         public void run() {
+		         try {
+		            URL url = new URL(urlString);
+		            Log.d("JSON URL = ",url.toString());
+		            
+		            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		           	//conn.setReadTimeout(10000 );//milliseconds
+		            //conn.setConnectTimeout(15000);//milliseconds
+		            //conn.setRequestMethod("GET");
+		            //conn.setDoInput(true);
+		            // Starts the query
+		            conn.connect();
+		         InputStream stream = conn.getInputStream();
+
+		      String data = convertStreamToString(stream);
+
+		      readAndParseJSON(data);
+		         stream.close();
+
+		         } catch (Exception e) {
+		        	 e.printStackTrace();
+		         	}
+		         }
+		   });
+		   
+		   thread.start(); 	
+	   }
+	   String convertStreamToString(java.io.InputStream is) {
+		      java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+		      return s.hasNext() ? s.next() : "";
+		   }
+	   
+   }
     
 }
 

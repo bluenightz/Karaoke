@@ -1,14 +1,20 @@
 package com.aig.karaoke;
 
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONObject;
 
 import com.bluenightz.karaoke3.remote;
 
 
 
 
+import android.annotation.SuppressLint;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -30,6 +36,7 @@ public class playlist {
 	public static Boolean isPlaying = false;
 	public static playlist thisclass;
 
+	
 	
 	
 	
@@ -103,13 +110,9 @@ public class playlist {
 	public static void addsong(song _s){
 		Log.d("playlist.java","addsong");
 		pl.add(_s);
-		remote.autoPlay();
-		/*
-		if(pl.size() == 1){
 		
-			remote.autoPlay();
-		}
-		*/
+		
+		
 		
 	}
 	
@@ -204,6 +207,8 @@ public class playlist {
 		*/
 		
 	}
+	
+	
 	
   
 }

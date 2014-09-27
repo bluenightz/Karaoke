@@ -9,6 +9,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
@@ -22,9 +23,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -33,6 +41,11 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -44,7 +57,9 @@ import com.bluenightz.karaoke3.result.AlbumListAdapter;
 import com.bluenightz.karaoke3.result.Data;
 import com.bluenightz.karaoke3.result.DataHandler;
 import com.bluenightz.karaoke3.result.AlbumListAdapter.AlbumListWrapper;
+//import com.bluenightz.karaoke3.HandleJSON;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -56,8 +71,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
+import android.renderscript.Element;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -80,24 +98,18 @@ import com.aig.karaoke.playlist.song;
 public class remote extends Activity{
 	
 	private ImageView search;
-	//private String ip = "first-pc:8080";
+	
 	private String ip;
 	private String host;
-	//private String pathtovideo = "%2Fvar%2Fwww%2Fhtml%2Fsong%2F";
-	//private String pathtovideo = "%2FhddExt%2FKARAOKESONG%2F";
-	//private String pathtovideo = "%2Fvar%2Fwww%2Fhtml%2FtoExternal%2FKARAOKESONG%2F";
-	//private String pathtovideo ="file%3A%2F%2F%2FC%3A%2Fxampp%2Fhtdocs%2Fkaraoke%2Fsong%2F";
-	//private String pathtovideo = "file%3A%2F%2F%2FC%3A%2Fxampp%2Fhtdocs%2Fkaraoke%2Fsong%2F";
-	//private String pathtovideo = "file%3A%2F%2F%2FC%3A%2Fsong%2F"; //window c:
-	//private String pathtovideo = "file%3A%2F%2F%2FApplications%2FMAMP%2Fhtdocs%2Fsong%2F";
 	private static String urlcommand;
-	//private swapmode sm = new swapmode();
+	private String statusJson;
 	private String urlplaylist;
 	private String serverpath;
 	public ArrayList<String> sN;
 	public ArrayList<String> sID;
 	public ArrayList<String> sF;
  	public List<song> data;
+ 	//public List<status> statusData;
  	private Boolean mutestat;
  	private ImageView mutebtn;
  	private SeekBar volbar1;
@@ -120,7 +132,6 @@ public class remote extends Activity{
  	private int __idtemp;
  	private String Time;
  	private TextView prevView;
- 	//public static AlbumListAdapter _a = null;
  	public int s1 = -1;
 	public int s2 = -1;
 	private TextView TextTemp;
@@ -141,8 +152,15 @@ public class remote extends Activity{
  	private String webPath;
  	private int timeOut;
  	private String mainUrl;
- 	//private String cmdurl;
- 	//private int currentid;
+ 	
+ 	
+ 	public String currentplid;
+    public String time;
+    public String length;
+    public String volume;
+    public CountDownTimer  t;
+    
+    
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -152,27 +170,24 @@ public class remote extends Activity{
         String _l = Lang.getLang();
         s = PreferenceManager.getDefaultSharedPreferences(this);
         ip = s.getString("ip", null);
-        //updatelist(_a);
-        
-        //check Update Playlist 
-        
-        
-        
-        
-//        ip = host+":8080";
-//        urlstatus = "http://"+ip+"/requests/status.xml";
-//    	urlcommand = "http://"+ip+"/requests/status.xml?";
-//    	urlplaylist = "http://"+ip+"/requests/playlist.xml";
-//    	serverpath = "http://"+host+"/karaoke/";
-//        newplaylist = serverpath+"control.php";
         
         webPath = "/karaoke/";
         serverpath = "http://"+ip+"/karaoke/";
         mainUrl = serverpath+"playlist.php";
         urlstatus = serverpath+"playlist.php?MODE=status";
+        statusJson = serverpath+"playlist.php?MODE=statusjson";
     	urlcommand = serverpath+"playlist.php?";
     	urlplaylist = serverpath+"playlist.php?MODE=playlist";
         newplaylist = serverpath+"playlist.php?MODE=playlist";
+        
+        
+        //getJson
+		final HandleJSON myObj;
+		myObj = new HandleJSON(statusJson);
+		myObj.fetchJSON();
+		while(myObj.parsingComplete);
+		
+  		
         
         if(mutestat==null){
         	mutestat=false;
@@ -187,9 +202,9 @@ public class remote extends Activity{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Log.d("remote.java","done");
-				sendnewplaylist();
-				swapmode.setstatus("no");
-				chgRemote("control");
+				//sendnewplaylist();
+				//swapmode.setstatus("no");
+				//chgRemote("control");
 			}
 		});
 		   
@@ -216,9 +231,10 @@ public class remote extends Activity{
         search.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent i = new Intent(remote.this, search.class); 
+				Intent i = new Intent(remote.this, search.class);
 				startActivity(i);
-				
+				t.cancel();
+			
 			}
 		});
         
@@ -226,7 +242,6 @@ public class remote extends Activity{
         mutebtn.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				
 				// TODO Auto-generated method stub   
 				if(mutestat==true){
 					cmd("nomute","");
@@ -246,7 +261,6 @@ public class remote extends Activity{
 				Log.d("remote.java","replay");
 				// TODO Auto-generated method stub
 		    	String cmdurl = urlcommand+"MODE=seek&val=0";
-		    	
 		    	try{
 		    		final InputStream is1 = new URL(cmdurl).openStream();
 		    	}catch(Exception e){
@@ -277,39 +291,21 @@ public class remote extends Activity{
 				if(data.size() > 0){ 
 					String currentid = data.get(0).id;
 					Log.d("currentid",currentid);
-					//playlist.currentID = currentid;
 					cmd("delete", currentid);
 					data.remove(0);
 					items.remove(0);
 					if(checkServer(mainUrl) == 200){
 						_a.notifyDataSetChanged();
 					}
+					
+					if((data.size() == 1)||(data.size() > 1)){
+						String newId = data.get(0).id; // add by ton
+						playlist.currentID = newId;
+						String cmdurl = urlcommand+"MODE=pl_play&id="+playlist.currentID;
+						checkServer(cmdurl);
+					}
+					
 				}
-				
-				
-			/*
-			if(data.size() > 0){  
-				Log.d("remote.java","data.size() > 0");
-				cmd("play",String.valueOf(0));
-				String currentid = data.get(0).id;
-				final String deleteid = playlist.currentID;
-				tempforplayagain = data.get(0);
-				data.remove(0);
-				items.remove(0);
-				_a.notifyDataSetChanged();
-				playlist._index = 0;
-				playlist.currentID = currentid;
-				
-				Handler handler = new Handler();
-				handler.postDelayed(new Runnable(){
-				@Override
-				      public void run(){
-						cmd("delete", deleteid);
-				   }
-				}, 1000);
-				
-				
-				}*/
 			}
 		});
         
@@ -342,6 +338,9 @@ public class remote extends Activity{
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				
+				String cmdurl = urlcommand+"MODE=seek&val=-10%25";
+				checkServer(cmdurl);
 				/*
 				if(playlist._index != 0){
 					String cmdurl = urlcommand+"MODE=pl_previous";  
@@ -357,6 +356,7 @@ public class remote extends Activity{
 			    		
 			    	}   
 				}*/
+				
 			}
 		});
         
@@ -366,7 +366,10 @@ public class remote extends Activity{
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				String cmdurl = urlcommand+"MODE=seek&val=%2B10%25";
+				checkServer(cmdurl);
 				 //(playlist._index != data.size()-1 &&  data.size() > 0)
+				/*
 				playlist._index = 0;
 				Log.d("playlist._index = ",Integer.toString(playlist._index));
 				if(playlist._index != data.size()-1 && data.size() > 0){
@@ -379,23 +382,17 @@ public class remote extends Activity{
 			    	playlist._index = v1;
 		    		data.remove(0);
 		    		items.remove(0);
-		    		/*
-			    	try{
-			    		final InputStream is5 = new URL(cmdurl).openStream();
-			    		Log.d("remote.java","Do Command");
-			    	}catch(Exception e){
 			    	
-			    	}
-			    	*/
-		    		//checkServer(cmdurl);
-			    	if(checkServer(cmdurl) == 200){
+		    		if(checkServer(cmdurl) == 200){
 			    		_a.notifyDataSetChanged();
 			    	}
+			    	
 				}
+				*/
+				
 			}
 		});
         
-         
          ImageView btnSwitchSound = (ImageView) findViewById(R.id.btnSwitchSound);
         	btnSwitchSound.setOnClickListener(new View.OnClickListener() {
 				
@@ -417,9 +414,6 @@ public class remote extends Activity{
 						cmdurl = "http://"+serverpath+"sound.php?R=100&L=0";
 						Log.d("remote.java cmdurl = ",cmdurl);
 					}
-					
-					   
-
 					//Log.e("press",cmd);   
 			    	
 			    	try{
@@ -430,228 +424,166 @@ public class remote extends Activity{
 				}
 			});
          
+        	volbar1 = (SeekBar) findViewById(R.id.volbar);
+        	//setup first Volume level
+        	String startVol = myObj.getvolume();
+    		final int IntstartVol = Integer.parseInt(startVol);
+    		
+        	int volStart = (int) Math.ceil((IntstartVol*100)/255);
+            volbar1.setProgress(volStart);
+            Log.d("remote.java","Setup Seek Bar");
+            volbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            
         
-        
-        volbar1 = (SeekBar) findViewById(R.id.volbar);
-        volbar1.setProgress(50);
-        Log.d("remote.java","Setup Seek Bar");
-        volbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-        
-    
-        int num = 255;
-        int vol = 0;
-             
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				String cmdurl = urlcommand+"MODE=volume&val="+vol;
-				Log.d("remote.java Seekbar","onStopTrackingTouch");
-		    	try{
-		    		final InputStream is = new URL(cmdurl).openStream();
-		    	}catch(Exception e){
-		    		
-		    	}
-			}
+            int num = 255;
+            int vol = 0;
+                 
+    			public void onStopTrackingTouch(SeekBar seekBar) {
+    				// TODO Auto-generated method stub
+    				String cmdurl = urlcommand+"MODE=volume&val="+vol;
+    				Log.d("remote.java Seekbar","onStopTrackingTouch");
+    		    	try{
+    		    		final InputStream is = new URL(cmdurl).openStream();
+    		    	}catch(Exception e){
+    		    		
+    		    	}
+    			}
 
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				Log.d("remote.java Seekbar","onStartTrackingTouch");
-			}
-			
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				// TODO Auto-generated method stub
-				Log.d("remote.java Seekbar","onProgressChanged");
-				//num = 500; comment by ton
-				num = 255;
-				vol = (int) Math.ceil((progress*255)/100);
-		    	Log.d("remote.java vol = ", Integer.toString(vol));
-			}
-		
-			
-        });
-		
+    			public void onStartTrackingTouch(SeekBar seekBar) {
+    				// TODO Auto-generated method stub
+    				Log.d("remote.java Seekbar","onStartTrackingTouch");
+    			}
+    			
+    			public void onProgressChanged(SeekBar seekBar, int progress,
+    					boolean fromUser) {
+    				// TODO Auto-generated method stub
+    				Log.d("remote.java Seekbar","onProgressChanged");
+    				//num = 500; comment by ton
+    				num = 255;
+    				vol = (int) Math.ceil((progress*255)/100);
+    		    	Log.d("remote.java vol = ", Integer.toString(vol));
+    			}
+    		
+    			
+            });
+        	
         
-          //final ListView l = (ListView) findViewById(R.id.listView1);
-          data = _parseXml(urlplaylist+"&clrcache="+Math.random());
-          //data = _parseXml(newplaylist);
-          String checkData = data.toString();
-          Log.d("remote.java dcheckData = ",checkData);
-          Log.d("remote.java data.size() = ",Integer.toString(data.size()));
-          Log.d("remote.java","setup New PLaytlist Data");
-          int firstremove = 0;
-          Log.d("remote.java firstremove = ","Initial Value for firstremove");
-	          for(int i = 0; i < data.size(); ++i){
-	        	  Log.d("remote.java firstremove = ","Into Loop");
-	        	  if(data.get(i).id.equals(playlist.currentID)){
-	        		  firstremove = i;
-	        		  Log.d("remote.java","firstremove");
-	        	  }
-	        	  Log.d("remote.java firstremove = ","Finish Loop");
-	          }
-	      Log.d("remote.java firstremove = ","Exit from Loop"); 
-          
-	      
-	      
-	      // comment by ton disable for error after start activity
-	      //tempforplayagain = data.get(firstremove);
-	      //Log.d("remote.java tempforplayagain = ","Set Data for tempforplayagain");
-          //data.remove(firstremove);
-          //Log.d("remote.java remove(firstremove) = ","Set Data for remove(firstremove)");
-          //playlist.updateplaylist(data);
-          //Log.d("remote.java"," playlist.updateplaylist");
-          // end comment by ton
-          
-	      
-	      
-          final DragNDropListView l = (DragNDropListView) findViewById(R.id.listView1); //comment by ton
-	  		items = new ArrayList<Map<String, Object>>();
-	  		for(int i = 0; i < data.size(); ++i) {
-	  			HashMap<String, Object> item = new HashMap<String, Object>();
-	  			item.put("name", data.get(i).name );
-	  			item.put("_id", data.get(i).id );
-	  			item.put("_current", data.get(i).current );
-	  			items.add(item);
-	  		}  
-	  		  
-	  		_a = new DragNDropSimpleAdapter(this.getApplicationContext(),
-	  				items, 
-	  				R.layout.row_remote,
-	  				new String[]{"name"},
-	  				new int[]{R.id.songname},
-	  				R.id.icondrag);
-	  		
+        	// first Create play list 
+        	final DragNDropListView l = (DragNDropListView) findViewById(R.id.listView1); //comment by ton
+        	_a = getPlayList(urlplaylist+"&clrcache="+Math.random());
 	  		l.setDragNDropAdapter(_a);
 	  		
 	  		
-	  		l.setOnItemDragNDropListener(new OnItemDragNDropListener(){
-
-				@Override
-				public void onItemDrag(DragNDropListView parent, View view,
-						int position, long id) {
-					// TODO Auto-generated method stub
-				}
-  
-				@Override
-				public void onItemDrop(DragNDropListView parent, View view,
-						int startPosition, int endPosition, long id) {
-					// TODO Auto-generated method stub
-
-					
-					Collections.swap(data, startPosition, endPosition);
-					//Collections.swap(items, startPosition, endPosition);
-					
-				}  
-	  			
-	  		});
-
-          
           l.setOnItemClickListener(new OnItemClickListener(){ 	
 			public void onItemClick(final AdapterView<?> arg0, final View arg1, final int arg2,
 					long arg3) {
-				//selectedID = sID.get(arg2);
-				selectedIndex = 0;
-				selectedIndex = arg2;
-				Log.d("selectedIndex = ",Integer.toString(selectedIndex));
-				if(selectedIndex != 0){
-						final CharSequence[] c = {"Play","Delete","Cancel"}; 
-						AlertDialog.Builder alertB = new AlertDialog.Builder(remote.this);
-						alertB.setTitle("Choose Action");
-						alertB.setItems(c,new DialogInterface.OnClickListener() {
-							
-							public void onClick(DialogInterface dialog, int which) {
-								// TODO Auto-generated method stub
-								String cmdurl = null;
-								switch(which){
-									case 0 : {
-												//cmd("play",String.valueOf(selectedIndex));
-												cmdurl = urlcommand+"MODE=pl_play&id="+data.get(selectedIndex).id;
-												tempforplayagain = data.get(selectedIndex);
-												
-												/*
-												for(int x = 0 ; x < data.size() ; ++x){
-													if(data.get(selectedIndex).id.equals(items.get(x).get("_id"))){
-														tempforplayagain = data.get(selectedIndex);
-														data.remove(selectedIndex);
-														items.remove(x);
-														break;
-													}
-												}
-												*/
-												String currentid = tempforplayagain.id;
-												final String deleteid = playlist.currentID;
-												playlist._index = selectedIndex;
-												Log.d("remote.java playlist._index = ",Integer.toString(playlist._index));
-												playlist.currentID = currentid;
-												Log.d("remote.java playlist.currentID = ",playlist.currentID);
-												try{
-										    		//final InputStream is = new URL(cmdurl).openStream();
-//													checkServer(cmdurl);
-													checkServer(cmdurl);
-										    		
-										    	}catch(Exception e){
-										    		
-										    	}
-												
-													Handler handler = new Handler();
-													handler.postDelayed(new Runnable(){
-													@Override
-													   public void run(){
-															//cmd("delete", deleteid);
+					selectedIndex = 0;
+					selectedIndex = arg2;
+					Log.d("selectedIndex = ",Integer.toString(selectedIndex));
+					if(selectedIndex != 0){
+							final CharSequence[] c = {"Play","Delete","Cancel"}; 
+							AlertDialog.Builder alertB = new AlertDialog.Builder(remote.this);
+							alertB.setTitle("Choose Action");
+							alertB.setItems(c,new DialogInterface.OnClickListener() {
+								
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+									String cmdurl = null;
+									switch(which){
+										case 0 : {
+													cmdurl = urlcommand+"MODE=pl_play&id="+data.get(selectedIndex).id;
+													tempforplayagain = data.get(selectedIndex);
+													
+													String currentid = tempforplayagain.id;
+													final String deleteid = playlist.currentID;
+													playlist._index = selectedIndex;
+													Log.d("remote.java playlist._index = ",Integer.toString(playlist._index));
+													playlist.currentID = currentid;
+													Log.d("remote.java playlist.currentID = ",playlist.currentID);
+													try{
+														checkServer(cmdurl);
+														_a.notifyDataSetInvalidated();
 														Log.d("remote.java","####UPDATE#####");
-														//_a.notifyDataSetChanged();
-													   }
-													}, 2000);
-												
-												
-												}break;
-									case 1 : {
-												//song checkItem = data.get(selectedIndex);
-												
-												Log.d("remote.java","Delete");
-										   		cmdurl = urlcommand+"MODE=pl_delete&id="+data.get(selectedIndex).id;
-										   		Log.d("remote.java cmdurl = ",cmdurl);
-												String cmdurlplay = urlcommand+"MODE=pl_next";
-												Log.d("remote.java cmdurlplay = ",cmdurlplay);
-												data.remove(selectedIndex); 
-												items.remove(selectedIndex);
-												//_a.notifyDataSetChanged();
-												try{
-										    		//final InputStream is = new URL(cmdurl).openStream();
-										    		if(checkServer(cmdurl) == 200){
+											    	}catch(Exception e){
+											    		
+											    	}
+													}break;
+										case 1 : {
+													Log.d("remote.java","Delete");
+											   		cmdurl = urlcommand+"MODE=pl_delete&id="+data.get(selectedIndex).id;
+											   		Log.d("remote.java cmdurl = ",cmdurl);
+													String cmdurlplay = urlcommand+"MODE=pl_next";
+													Log.d("remote.java cmdurlplay = ",cmdurlplay);
+													data.remove(selectedIndex); 
+													items.remove(selectedIndex);
+													
+													try{
+											    		//final InputStream is = new URL(cmdurl).openStream();
+											    		if(checkServer(cmdurl) == 200){
+															_a.notifyDataSetChanged();
+														}
+											    	}catch(Exception e){
+											    		
+											    	}
+													}break;
+										case 2 : {
+													Log.d("remote.java","Cancel");
+													int testnum = arg2;
+													Log.e("testnum", String.valueOf(testnum));
+													if(checkServer(mainUrl) == 200){
 														_a.notifyDataSetChanged();
 													}
-										    	}catch(Exception e){
-										    		
-										    	}
-												
-										
-												}break;
-									case 2 : {
-												Log.d("remote.java","Cancel");
-												int testnum = arg2;
-												Log.e("testnum", String.valueOf(testnum));
-												if(checkServer(mainUrl) == 200){
-													_a.notifyDataSetChanged();
-												}
-												}break;
+													}break;
+									}
+									
 								}
 								
-							}
-							
-						});
-						AlertDialog alert = alertB.create();
-						alert.show();
-				
+							});
+							AlertDialog alert = alertB.create();
+							alert.show();
+					
+					}
 				}
-			}
-        }
-        );
+          });
          
+          
+          
+          	
+         
+          
+          t = new CountDownTimer( Long.MAX_VALUE , 5000) {
+        	  String startID =  myObj.getcurrentplid();
+	          public void onTick(long millisUntilFinished) {
+	              	Log.d("remote","##################Timer tick#######################");
+	              	HandleJSON myObj;
+	        		myObj = new HandleJSON(statusJson);
+	        		myObj.fetchJSON();
+	        		while(myObj.parsingComplete);
+	        		String NowID =  myObj.getcurrentplid();
+	        		
+	        		Log.d("startID = ",startID);
+	        		Log.d("NowID = ",NowID);
+	        		
+	        		//startID
+	        		if(Integer.parseInt(NowID) != Integer.parseInt(startID)){
+	        			Log.d("remote","################## UPDATE LIST #######################");
+	        			_a = getPlayList(urlplaylist+"&clrcache="+Math.random());
+	        	  		l.setDragNDropAdapter(_a);
+	        	  		startID = NowID;
+	        		}
+	              
+	          }
+	
+	          public void onFinish() {
+	              Log.d("remote","Timer last tick");            
+	              start();
+	          }
+              
+              
+           }.start();
+           
     }
     
-    
-    
-  
     
     public void showmv(){
     	karaokeTimeManage.clear();
@@ -665,7 +597,6 @@ public class remote extends Activity{
     		//cmd("delete",playlist.getsong(i).id);
     		playlist.deletesong(0);
     	}
-    	//updatelist(_a);
     	
     	Collections.shuffle(mv);
     	addmv(mv);
@@ -678,25 +609,10 @@ public class remote extends Activity{
     		//cmd("addnopath",mv.get(i).path);
     	}
     	//data = mv;
-    	//updatelist();
     	cmd("play2","");
     }
     
-    public static void updatelist(final DragNDropSimpleAdapter _a){
-    	Log.d("remote.java","updatelist");
-    		//_a.notifyDataSetChanged();
-    		final Handler update = new Handler();
-    		Runnable run = new Runnable(){
-    			public void run() {
-    				// TODO Auto-generated method stub
-
-    					Log.d("remote.java","getUpdate");
-        				_a.notifyDataSetChanged();
-    				}
-
-    		};  
-    		update.postDelayed(run, 1000);
-    }
+    
        
     private void updatecolorTxt(int a2,View a1, AdapterView a0, AlbumListAdapter aa){
     	
@@ -765,6 +681,12 @@ public class remote extends Activity{
     	if(method == "delete"){
     		cmdurl = urlcommand+"MODE=pl_delete&id="+url;
     	}
+    	if(method == "seekfw"){
+    		cmdurl = urlcommand+"MODE=seek&val=+10%";
+    	}
+    	if(method == "seekrw"){
+    		cmdurl = urlcommand+"MODE=seek&val=-10%";
+    	}
     	
     	try{
     		final InputStream is = new URL(cmdurl).openStream();
@@ -798,8 +720,8 @@ public class remote extends Activity{
 		    Log.e("SAX XML", "sax parse io error", ioe); 
 		  } 
 		  
-		  String checkData = data.toString();
-		  Log.d("remote.java checkData = ",checkData);
+		  //String checkData = data.toString();
+		  //Log.d("remote.java checkData = ",checkData);
 		  
 		  return data; 
 	} 
@@ -807,9 +729,7 @@ public class remote extends Activity{
 	public class AlbumListAdapter extends ArrayAdapter<Data> {
 			
 			AlbumListAdapter(Context c, int r, List l) {
-				/*super(ParseXMLActivity.this,
-						R.layout.row_albumlist,
-						data);*/
+				
 				
 				super(c,r,l);
 				
@@ -853,34 +773,7 @@ public class remote extends Activity{
 				if(_t_artist!=null){
 					//_t_artist.setText(data.get(position).artist);
 				}
-				//if(false){
-//				if(data.get(position).current!=false){
-//					txtViewColor = _t_title;
-//					_t_title.setTextColor(Color.parseColor("#FF9900"));
-//					prevtext = _t_title;
-//				}else{
-//					_t_title.setTextColor(Color.parseColor("#FFFFFF"));
-//				}
-				
-				
-				
-				
-				
-				
-				//_rt.setText(data.get(position).area);
-				/*
-				row.setOnClickListener(new View.OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						Log.e("txt","");
-					}
-				});
-				*/
-				
-				
-				//wrapper.populateFrom(data.get(position), position);
+			
 				
 				return(row);
 			}
@@ -888,26 +781,14 @@ public class remote extends Activity{
 				
 				private TextView albumName =null;
 				private View row=null;
-				//private ImageReceivedCallback imageRenderCallback = AlbumActivity.this;
+				
 				
 				AlbumListWrapper(View row) {
 					this.row=row;
 				}
 				
 				void populateFrom(final Data albumList, int pos){
-					/*
-					row.setOnClickListener(new View.OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {
-							String s = albumList.songid;
-							// TODO Auto-generated method stub
-							Intent i = new Intent(result.this,list.class);
-							i.putExtra("songid", s);
-							startActivity(i);;
-						}
-					});
-					*/
+					
 				}
 			}
 	}
@@ -996,16 +877,16 @@ public class remote extends Activity{
 			    
 				//_insong = true;
 			}else if(localName.equals("id")){
-				Log.e("#### We're in ID node","Yes, we are.");
+				//Log.e("#### We're in ID node","Yes, we are.");
 				_inId = true;
 			}else if(localName.equals("name")){
-				Log.e("#### We're in name node","Yes, we are.");
+				//Log.e("#### We're in name node","Yes, we are.");
 				_inName = true;
 			}else if(localName.equals("url")){
-				Log.e("#### We're in url node","Yes, we are.");
+				//Log.e("#### We're in url node","Yes, we are.");
 				_inUrl = true;
 			}else if(localName.equals("playtime")){
-				Log.e("#### We're in playtime node","Yes, we are.");
+				//Log.e("#### We're in playtime node","Yes, we are.");
 				_inTime = true;
 			}
 		  } 
@@ -1020,7 +901,7 @@ public class remote extends Activity{
 		   */ 
 		  @Override 
 		  public void endElement(String namespaceURI, String localName, String qName) throws SAXException { 
-		    Log.v("endElement", localName); 
+		    //Log.v("endElement", localName); 
 		    if(localName.equals("onesong")){
 				//_insong = false;
 			}else if(localName.equals("id")){
@@ -1052,7 +933,7 @@ public class remote extends Activity{
 		    	
 			}else if(_inId){
 				_data.id = chars.toString();
-				Log.e("##show all string id",_data.id);
+				//Log.e("##show all string id",_data.id);
 			}else if(_inName){
 				_data.name = chars.toString();
 			}
@@ -1077,10 +958,12 @@ public class remote extends Activity{
 		 
 		  }
 	}
+	
+	
     
-
-    
-    private void runcmd(String t){
+	
+	
+   private void runcmd(String t){
 
     	String cmdurl = urlcommand+"MODE=seek&val="+t;
     	try{
@@ -1092,7 +975,7 @@ public class remote extends Activity{
        
     
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+   public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) { //Back key pressed
            //Things to Do
         	Log.e("this is back button","");
@@ -1101,82 +984,11 @@ public class remote extends Activity{
         return super.onKeyDown(keyCode, event);
     }
     
-    private void updateVlc(){
-    	
-    	
-//
-//       	
-//       	playlist temppl = new playlist();
-//       	com.bluenightz.karaoke3.remote.song clonesong = temppl.new song();
-//       	
-//    	
-//    	int a = playlist.currentID;
-//    	int indexofcurrentID = 0;
-//    	
-//    	for(int i = 0; i < playlist.gettotal(); ++i){
-//    		if(Integer.valueOf(playlist.getsong(i).id) == a){
-//    			indexofcurrentID = i;
-//    		}
-//    	}
-//    	
-//    	for(int i = 0; i < playlist.gettotal(); ++i){
-//    		if(i != indexofcurrentID){
-//        		cmd("delete",playlist.getsong(i).id);
-//    		}   
-//    	}
-//    	
-//    	for(int i = 0; i < playlist.gettotal(); ++i){
-//        	cmd("add",playlist.getsong(i).path);
-//    	}
-//    	
-//    	song original = playlist.getsong(indexofcurrentID);
-//       	
-//       	clonesong.id = original.id;
-//       	clonesong.current = original.current;
-//       	clonesong.time = original.time;
-//       	clonesong.name = original.name;
-//       	clonesong.path = original.path;
-//    	
-//    	data.add(0, clonesong);
-//    	playlist.insertnewplaylist(data);
-//    	
-//    	List<com.aig.karaoke.playlist.song> aaa = playlist.getplaylist();
-//    	
-//    	List<Data> LL = _parseXml(urlplaylist);
-//    	
-//    	playlist._index = indexofcurrentID+1;
-//    	playlist.currentID = Integer.valueOf(LL.get(playlist._index).id);
-//    	
-//    	for(int i = 0; i < playlist.gettotal(); ++i){
-//    		if(i!=0){
-//    			playlist.getsong(i).id = LL.get(i).id;
-//    		}
-//    	}
-    	
-    	
-    	
-    	      
-    	
-    }
+   //get playlist 
     
-   private void sendnewplaylist(){
-   	
-	playlist.isswap = true;
-	List<song> d = data;
-	int indexafterswap = 0;
-	for(int a = 0 ; a < d.size() ; ++a){
-		String _id = d.get(a).id;
-		if( _id.toString().equals(playlist.currentID.toString()) ){
-			indexafterswap = a;
-		}
-	}
-	playlist._index = indexafterswap;
-	playlist.insertnewplaylist(d);
-    playlist.insertnewplaylist(data);
-   	
-   	//updateVlc(); //comment by ton
-   	Log.d("remote.java","###########update VLC###########");   
-   }
+   
+    
+   
    
    // checkserver Status 
    public int checkServer(String getUrl){
@@ -1188,7 +1000,6 @@ public class remote extends Activity{
 		   InputStream in = new BufferedInputStream(urlcon.getInputStream());
 		   promt = urlcon.getResponseCode() ;
 		   Log.d("remote.java promt = ",Integer.toString(promt));
-		   
 
 	   }catch (MalformedURLException e1) {
 		   
@@ -1202,20 +1013,122 @@ public class remote extends Activity{
    
    public static void autoPlay(){
 	  
-	   //String currentid = data.get(0).id; // add by ton
-	  // playlist.currentID = currentid; // add by ton
-		
 			Log.d("remote getCurrent ID","");
 			
 			String cmdurl = urlcommand+"MODE=pl_play";
+			
 			try{
 	    		final InputStream is1 = new URL(cmdurl).openStream();
 	    	}catch(Exception e){
 	    		
 	    	}
 		
-		
+   }
+   
+   // create playlist by ton
+   public DragNDropSimpleAdapter getPlayList(String cmd){
+	    // create playlist in remote
+   		data = _parseXml(urlplaylist+"&clrcache="+Math.random());
+ 		items = new ArrayList<Map<String, Object>>();
+ 		for(int i = 0; i < data.size(); ++i) {
+ 			HashMap<String, Object> item = new HashMap<String, Object>();
+ 			item.put("name", data.get(i).name );
+ 			item.put("_id", data.get(i).id );
+ 			item.put("_current", data.get(i).current );
+ 			items.add(item);
+ 		}  
+ 		_a = new DragNDropSimpleAdapter(this.getApplicationContext(),
+ 				items, 
+ 				R.layout.row_remote,
+ 				new String[]{"name"},
+ 				new int[]{R.id.songname},
+ 				R.id.icondrag);
+	   return _a;
+   }
+   
+   
+   
+   //check player status
+    
+ 
+ public class HandleJSON {
+	public String currentplid = "currentplid";
+	   public String time = "time";
+	   public String length = "length";
+	   public String volume = "volume";
+	   public String urlString = null;
+	   public volatile boolean parsingComplete = true;
+	   public HandleJSON(String url){
+		      this.urlString = url;
+	   }
+	   public String getcurrentplid(){
+	      return currentplid;
+	   }
+	   public String gettime(){
+		      return time;
+		   }
+	   public String getlength(){
+		      return length;
+		   }
+	   public String getvolume(){
+		      return volume;
+		   }
+	   
+	   @SuppressLint("NewApi")
+	   public void readAndParseJSON(String in) {
+		   try {
+		         JSONObject reader = new JSONObject(in);
+		         currentplid = reader.getString("currentplid");
+		         time = reader.getString("time");
+		         length = reader.getString("length");
+		         volume = reader.getString("volume");
+		         parsingComplete = false;
+
+		        } catch (Exception e) {
+		           // TODO Auto-generated catch block
+		           e.printStackTrace();
+		        }
+	   }
+	   public void fetchJSON(){
+		   Thread thread = new Thread(new Runnable(){
+			  
+			   @Override
+		         public void run() {
+		         try {
+		            URL url = new URL(urlString);
+		            Log.d("JSON URL = ",url.toString());
+		            
+		            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		           	//conn.setReadTimeout(10000 );//milliseconds
+		            //conn.setConnectTimeout(15000);//milliseconds
+		            //conn.setRequestMethod("GET");
+		            //conn.setDoInput(true);
+		            // Starts the query
+		            conn.connect();
+		         InputStream stream = conn.getInputStream();
+
+		      String data = convertStreamToString(stream);
+
+		      readAndParseJSON(data);
+		         stream.close();
+
+		         } catch (Exception e) {
+		        	 e.printStackTrace();
+		         	}
+		         }
+		   });
+		   
+		   thread.start(); 	
+	   }
+	   String convertStreamToString(java.io.InputStream is) {
+		      java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+		      return s.hasNext() ? s.next() : "";
+		   }
 	   
    }
+   
+   
+   
+   
    
 }
