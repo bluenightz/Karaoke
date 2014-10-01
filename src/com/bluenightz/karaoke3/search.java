@@ -272,7 +272,7 @@ public class search extends Activity{
 				case R.id.watchmodern:
 					Intent i4 = new Intent(search.this, result.class);
                     i4.putExtra("searchstr","" );
-                    i4.putExtra("modestr","modern" );
+                    i4.putExtra("modestr","modern");
 
 					i4.putStringArrayListExtra("sN", sN);
 					i4.putStringArrayListExtra("sID", sID);
