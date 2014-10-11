@@ -276,7 +276,7 @@ public class Karaoke extends Activity{
     public void updateSYS(){
 		
 		Context context = getApplicationContext();
-		CharSequence text = "กรุณารอสักครู่...จนกว่าจะมีหน้าต่างขึ้นมาให้อัพเดท";  
+		CharSequence text = "������������������������������������������...���������������������������������������������������������������������������������������������������";  
 		int duration = Toast.LENGTH_SHORT;
 		
 		Toast toast = Toast.makeText(context, text, duration);   
@@ -285,7 +285,8 @@ public class Karaoke extends Activity{
 		
     	try {   
     		  
-            URL url = new URL("http://aig.avc-holding.com/karaoke.apk");
+    		//URL url = new URL("http://aig.avc-holding.com/karaoke.apk");
+    		URL url = new URL("http://dton.avc-holding.com/karaoke/karaoke.apk");
             //URL url = new URL("http://10.10.3.40/karaoke3.apk");
             //URL url = new URL("http://aig.avc-holding.com/karaoke3.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
