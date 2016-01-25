@@ -148,6 +148,7 @@ public class Karaoke extends Activity{
         ImageView menu3 = (ImageView) findViewById(R.id.menu3);
         ImageView menu4 = (ImageView) findViewById(R.id.menu4);
         ImageView menu5 = (ImageView) findViewById(R.id.menu5);
+        final Button btnSetting = (Button) findViewById(R.id.btnsetting);
         
         final Button btnconfig = (Button) findViewById(R.id.btnconfig);
         
@@ -169,6 +170,7 @@ public class Karaoke extends Activity{
 				Intent i2 = new Intent(Karaoke.this,search.class);
 				i2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 				startActivity(i2);
+				finish();
 				
 			}
 		});
@@ -181,6 +183,7 @@ public class Karaoke extends Activity{
 				Intent i2 = new Intent(Karaoke.this,search.class);
 				i2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 				startActivity(i2);
+				finish();
 				
 				
 				
@@ -198,6 +201,7 @@ public class Karaoke extends Activity{
 				Intent i2 = new Intent(Karaoke.this,search.class);
 				i2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 				startActivity(i2);
+				finish();
 				
 			}
 		});
@@ -210,6 +214,7 @@ public class Karaoke extends Activity{
 				Intent i2 = new Intent(Karaoke.this,search.class);
 				i2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 				startActivity(i2);
+				finish();
 				
 			}
 		});
@@ -222,10 +227,20 @@ public class Karaoke extends Activity{
 				Intent i2 = new Intent(Karaoke.this,search.class);
 				i2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 				startActivity(i2);
-				
+				finish();
 			}
 		});
         
+        btnSetting.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent i = new Intent(Karaoke.this,OptionActivity.class);
+    			startActivity(i);
+    			//finish();
+			}
+		});
         
         btnconfig.setOnClickListener(new View.OnClickListener() {
 			
@@ -234,6 +249,7 @@ public class Karaoke extends Activity{
 				// TODO Auto-generated method stub
 				Intent i = new Intent(Karaoke.this, config.class);
 				startActivity(i);
+				finish();
 			}
 		});
         
@@ -264,6 +280,7 @@ public class Karaoke extends Activity{
     		case R.id.settings:
     			Intent i = new Intent(this,OptionActivity.class);
     			startActivity(i);
+    			finish();
     			
     			return true;
     		case R.id.update:

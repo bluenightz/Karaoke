@@ -234,7 +234,7 @@ public class remote extends Activity{
 				Intent i = new Intent(remote.this, search.class);
 				startActivity(i);
 				t.cancel();
-			
+				finish();
 			}
 		});
         
@@ -403,15 +403,18 @@ public class remote extends Activity{
 					int soundC = (playlist.soundChannel<2) ? ++playlist.soundChannel : (playlist.soundChannel=0);
 					if(soundC==0){
 						//100%,100%
-						cmdurl = "http://"+serverpath+"sound.php?R=100&L=100";
+						//cmdurl = "http://"+serverpath+"sound.php?R=100&L=100";
+						cmdurl = serverpath+"sound.php?R=100&L=100";
 						Log.d("remote.java cmdurl = ",cmdurl);
 					}else if(soundC==1){
 						//0%,100%
-						cmdurl = "http://"+serverpath+"sound.php?R=0&L=100";
+						//cmdurl = "http://"+serverpath+"sound.php?R=0&L=100";
+						cmdurl = serverpath+"sound.php?R=0&L=100";
 						Log.d("remote.java cmdurl = ",cmdurl);
 					}else if(soundC==2){
 						//100%,0%
-						cmdurl = "http://"+serverpath+"sound.php?R=100&L=0";
+						//cmdurl = "http://"+serverpath+"sound.php?R=100&L=0";
+						cmdurl = serverpath+"sound.php?R=100&L=0";
 						Log.d("remote.java cmdurl = ",cmdurl);
 					}
 					//Log.e("press",cmd);   
@@ -472,6 +475,7 @@ public class remote extends Activity{
         	final DragNDropListView l = (DragNDropListView) findViewById(R.id.listView1); //comment by ton
         	_a = getPlayList(urlplaylist+"&clrcache="+Math.random());
 	  		l.setDragNDropAdapter(_a);
+	  		
 	  		
 	  		
           l.setOnItemClickListener(new OnItemClickListener(){ 	
@@ -554,23 +558,26 @@ public class remote extends Activity{
           t = new CountDownTimer( Long.MAX_VALUE , 5000) {
         	  String startID =  myObj.getcurrentplid();
 	          public void onTick(long millisUntilFinished) {
-	              	Log.d("remote","##################Timer tick#######################");
-	              	HandleJSON myObj;
-	        		myObj = new HandleJSON(statusJson);
-	        		myObj.fetchJSON();
-	        		while(myObj.parsingComplete);
-	        		String NowID =  myObj.getcurrentplid();
-	        		
-	        		Log.d("startID = ",startID);
-	        		Log.d("NowID = ",NowID);
-	        		
-	        		//startID
-	        		if(Integer.parseInt(NowID) != Integer.parseInt(startID)){
-	        			Log.d("remote","################## UPDATE LIST #######################");
-	        			_a = getPlayList(urlplaylist+"&clrcache="+Math.random());
-	        	  		l.setDragNDropAdapter(_a);
-	        	  		startID = NowID;
-	        		}
+	              	
+	              	if("statusJson" != ""){
+	              		Log.d("remote","##################Timer tick#######################");
+	              		HandleJSON myObj;
+		        		myObj = new HandleJSON(statusJson);
+		        		myObj.fetchJSON();
+		        		while(myObj.parsingComplete);
+		        		String NowID =  myObj.getcurrentplid();
+		        		
+		        		//startID
+		        		if(Integer.parseInt(NowID) != Integer.parseInt(startID)){
+		        			Log.d("remote","################## UPDATE LIST #######################");
+		        			_a = getPlayList(urlplaylist+"&clrcache="+Math.random());
+		        	  		l.setDragNDropAdapter(_a);
+		        	  		startID = NowID;
+		        		}
+	              	}else{
+	              		Log.d("remote","##################No Timmer#######################");
+	              	}
+	              	
 	              
 	          }
 	
@@ -1043,6 +1050,7 @@ public class remote extends Activity{
  				new String[]{"name"},
  				new int[]{R.id.songname},
  				R.id.icondrag);
+ 		
 	   return _a;
    }
    

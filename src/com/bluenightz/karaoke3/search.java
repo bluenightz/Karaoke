@@ -201,6 +201,15 @@ public class search extends Activity{
 				    } 
 					break;
 				case R.id.newentry:
+					Intent i1 = new Intent(search.this, result.class);
+                    i1.putExtra("searchstr","" );
+                    i1.putExtra("modestr","newentry");
+
+					i1.putStringArrayListExtra("sN", sN);
+					i1.putStringArrayListExtra("sID", sID);
+					i1.putStringArrayListExtra("sF", sF);
+                    
+					startActivity(i1);
 					
 					break;
 				case R.id.watchqueue:

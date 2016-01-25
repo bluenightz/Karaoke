@@ -31,7 +31,7 @@ public class DragNDropSimpleAdapter extends SimpleAdapter implements DragNDropAd
 	public DragNDropSimpleAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to, int handler) {
 		super(context, data, resource, from, to);
 		
-		mHandler = handler;
+		//mHandler = handler; // comment for disable drag by ton
 		setup(data.size());
 	}
 
