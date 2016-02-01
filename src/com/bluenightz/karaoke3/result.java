@@ -94,6 +94,7 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import com.aig.karaoke.playlist;
+import com.bluenightz.karaoke3.NetworkManage;
 //import com.
 
 public class result extends Activity{
@@ -230,154 +231,161 @@ public class result extends Activity{
         
         l22 = (ListView) findViewById(R.id.listView1);
         
-        data = _parseXml(_urlSearch); 
+        if( NetworkManage.isOnline() ){
+        	data = _parseXml(_urlSearch); 
           
-        Data more = new Data();
-        more.title = "No more result...";
-        if(data.size()==20){
-        	data.add(more);
-        }  
-          
-        
-        _a = new AlbumListAdapter(result.this, R.layout.row_pic_layout, data);
-        l.setAdapter(_a);
-        
-        l.setOnItemClickListener(new OnItemClickListener(){
+	        Data more = new Data();
+	        more.title = "No more result...";
+	        if(data.size()==20){
+	        	data.add(more);
+	        }  
+	          
+	        
+	        _a = new AlbumListAdapter(result.this, R.layout.row_pic_layout, data);
+	        l.setAdapter(_a);
+	        
+	        l.setOnItemClickListener(new OnItemClickListener(){
 
-		
-			public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
-					long arg3) {
-				// TODO Auto-generated method stub
-				
-				final CharSequence[] c = {"Add to Queue","Play","Cancel"};
-				final CharSequence[] c2 = {"File not Found!!"};
-				AlertDialog.Builder alertB = new AlertDialog.Builder(result.this);
-				alertB.setTitle("Choose Action");
-				
-				
-				if(arg2 == l.getCount()-1 && l.getCount() > 20 ){
-					++page;
-					 
-					int m = l.getCount();
-					data.remove(m-1);
+			
+				public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
+						long arg3) {
+					// TODO Auto-generated method stub
 					
-					_urlSearch = serverpath+"webservice.php?type=search&mode="+modestr+"&name="+searchstr+"&page="+page+"&clrcache="+Math.random();
+					final CharSequence[] c = {"Add to Queue","Play","Cancel"};
+					final CharSequence[] c2 = {"File not Found!!"};
+					AlertDialog.Builder alertB = new AlertDialog.Builder(result.this);
+					alertB.setTitle("Choose Action");
 					
 					
-					datamore = _parseXml(_urlSearch);
-					
-					data.addAll(datamore);
-					
+					if(arg2 == l.getCount()-1 && l.getCount() > 20 ){
+						++page;
+						 
+						int m = l.getCount();
+						data.remove(m-1);
 						
-					Data more = new Data();
-			        more.title = "No more result...";
-			        data.add(more);
+						_urlSearch = serverpath+"webservice.php?type=search&mode="+modestr+"&name="+searchstr+"&page="+page+"&clrcache="+Math.random();
 						
 						
-					_a.notifyDataSetChanged();
-					
-					l.smoothScrollToPosition(m);
-					
-					
-					_a.notifyDataSetChanged();
-				}else{
-//					String urlexist = directpath+data.get(arg2).songurl;
-//					String urlexist2 = directpath2+data.get(arg2).songurl;
-					
-					if(exists(data.get(arg2))){    
-
-				    	Log.e("show newplaylist === ", newplaylist); 
-						alertB.setItems(c,new DialogInterface.OnClickListener() {
+						datamore = _parseXml(_urlSearch);
 						
+						data.addAll(datamore);
 						
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-
 							
-							List<Data> List = _parseXml(newplaylist); 
-							//String s = (List.size()==0)?"Play":(String) c[which];
-
-							if(playlist.mvmode == true){
-								cmd("empty","");
-								playlist.mvmode=false;  
-							} 
-							switch(which){
-							case 0: {
-									Log.d("result.java ","Add to Queue");
-									final String file = urlencode(_songurlobject.url);
-									Log.d("result.java file = ",file);
-									cmd("add",file);
-									List = _parseXml(newplaylist);
-									Data ss = List.get(List.size()-1);
-									song _s = new playlist().new song();
-									_s.id = ss.id;
-									
-									//_s.path = ss.path; //comment by ton
-									//_s.time = Integer.valueOf(ss.time); //comment by ton
-									playlist.addsong(_s);
-									
-									HandleJSON myObj;
-									myObj = new HandleJSON(statusJson);
-									myObj.fetchJSON();
-									while(myObj.parsingComplete);
-									String NowID =  myObj.getcurrentplid();
-									if(Integer.parseInt(NowID)==-1){
-										com.bluenightz.karaoke3.remote.autoPlay();
-									}
-									
-							}
-									break;
-							case 1: {
-									final String file = urlencode(_songurlobject.url);
-									cmd("play",file);
-									List = _parseXml(newplaylist);
-									Data ss = List.get(List.size()-1);
-									song _s = new playlist().new song();
-									_s.id = ss.id;
-									//_s.path = ss.path; //comment by ton
-									//_s.time = Integer.valueOf(ss.time); //comment by ton
-									playlist.addsong(_s);
-									playlist._index = 0;
-									playlist.currentID = ss.id;
-									//String _timestr = ss.time; comment by ton
-									//int _timeint = Integer.valueOf(_timestr)/1000-1500; comment by ton
-									}
-									break;
-							case 2: 
-									Log.d("result.java ","cancle");
-									break;
-							default :
-									break;
-							
-							}
+						Data more = new Data();
+				        more.title = "No more result...";
+				        data.add(more);
 							
 							
-						}
-					});
-					AlertDialog alert = alertB.create();
-					alert.show();
-					
-					
+						_a.notifyDataSetChanged();
+						
+						l.smoothScrollToPosition(m);
+						
+						
+						_a.notifyDataSetChanged();
 					}else{
-						alertB.setTitle("Alert Message");
-						alertB.setItems(c2,new DialogInterface.OnClickListener() {
+	//					String urlexist = directpath+data.get(arg2).songurl;
+	//					String urlexist2 = directpath2+data.get(arg2).songurl;
+						
+						if(exists(data.get(arg2))){    
+
+					    	Log.e("show newplaylist === ", newplaylist); 
+							alertB.setItems(c,new DialogInterface.OnClickListener() {
 							
 							
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
+
 								
-								 
+								List<Data> List = _parseXml(newplaylist); 
+								//String s = (List.size()==0)?"Play":(String) c[which];
+
+								if(playlist.mvmode == true){
+									cmd("empty","");
+									playlist.mvmode=false;  
+								} 
+								switch(which){
+								case 0: {
+										Log.d("result.java ","Add to Queue");
+										final String file = urlencode(_songurlobject.url);
+										Log.d("result.java file = ",file);
+										cmd("add",file);
+										List = _parseXml(newplaylist);
+										Data ss = List.get(List.size()-1);
+										song _s = new playlist().new song();
+										_s.id = ss.id;
+										
+										//_s.path = ss.path; //comment by ton
+										//_s.time = Integer.valueOf(ss.time); //comment by ton
+										playlist.addsong(_s);
+										
+										HandleJSON myObj;
+										myObj = new HandleJSON(statusJson);
+										myObj.fetchJSON();
+										while(myObj.parsingComplete);
+										String NowID =  myObj.getcurrentplid();
+										if(Integer.parseInt(NowID)==-1){
+											com.bluenightz.karaoke3.remote.autoPlay();
+										}
+										
+								}
+										break;
+								case 1: {
+										final String file = urlencode(_songurlobject.url);
+										cmd("play",file);
+										List = _parseXml(newplaylist);
+										Data ss = List.get(List.size()-1);
+										song _s = new playlist().new song();
+										_s.id = ss.id;
+										//_s.path = ss.path; //comment by ton
+										//_s.time = Integer.valueOf(ss.time); //comment by ton
+										playlist.addsong(_s);
+										playlist._index = 0;
+										playlist.currentID = ss.id;
+										//String _timestr = ss.time; comment by ton
+										//int _timeint = Integer.valueOf(_timestr)/1000-1500; comment by ton
+										}
+										break;
+								case 2: 
+										Log.d("result.java ","cancle");
+										break;
+								default :
+										break;
+								
+								}
+								
+								
 							}
 						});
 						AlertDialog alert = alertB.create();
 						alert.show();
 						
+						
+						}else{
+							alertB.setTitle("Alert Message");
+							alertB.setItems(c2,new DialogInterface.OnClickListener() {
+								
+								
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+									
+									 
+								}
+							});
+							AlertDialog alert = alertB.create();
+							alert.show();
+							
+						}
+						/**/
+						
 					}
-					/**/
-					
 				}
-			}
-        });
+	        });
+        }else{
+        	// โชว์ Dialog ขึ้นมาประมาณว่าเช็ค internet หน่อย 
+        	// เพราะบางทีจะมีเคสที่ว่า wifi ต่อได้ แต่สัญญาณไม่วิ่ง
+        }
+        
+
         
         
         
